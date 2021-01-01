@@ -1,0 +1,48 @@
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.wrapper .schedule table, th, td, caption{
+  border: 1px solid black;
+  text-align: center;
+  padding: 1px;
+  
+}
+
+table{
+float: left;
+}
+
+.wrapper {
+max-width: 1000px;
+margin: 0 auto;
+}
+
+.wrapper .schedule table, th, td, caption{
+border: 1px solid black;   
+border-radius:6px;
+}
+
+.schedule table{
+float: left;
+border-radius:6px;
+}
+
+.wrapper .reserve .reservationStub{
+float: left;
+}
+
+.wrapper .reserve .availabilityTable{
+float:right;  
+}
+
+.availabilityTable table, tr, th{
+border: 1px solid black;
+border-radius:6px;
+}
+
+.availabilityTable caption{
+font-size: 20px;
+font-weight: bold;
+}

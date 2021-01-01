@@ -1,0 +1,284 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+    <h1>Weekly Fitness Class Schedule</h1>
+    <div class="schedule">
+
+        {% for i in dayOrder %}
+                    {% if i == 6 %}
+                    <table>
+                        <th>Sunday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Sunday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>           
+                        {% for class in sundayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+
+                                    {% for k,v in datesList.items %}
+                                        {% if k == 'Sunday' %}
+                                            <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Sunday' %}
+                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>
+                    {% elif i == 5 %}
+                    <table>
+                        <th>Saturday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Saturday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>       
+                        {% for class in saturdayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}                        
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+
+                                    {% for k,v in datesList.items %}
+                                        {% if k == 'Saturday' %}
+                                            <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}                                    
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Saturday' %}
+                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>
+                    {% elif i == 4 %}
+                    <table>
+                        <th>Friday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Friday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>       
+                        {% for class in fridayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}                        
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+                                    {% for k,v in datesList.items %}
+                                        {% if k == 'Friday' %}
+                                            <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}                                    
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Friday' %}
+                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>
+                    {% elif i == 3 %}
+                    <table>
+                        <th>Thursday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Thursday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>       
+                        {% for class in thursdayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}                        
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+                                    {% for k,v in datesList.items %}
+                                    {% if k == 'Thursday' %}
+                                        <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Thursday' %}
+                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>
+                    {% elif i == 2 %}
+                    <table>
+                        <th>Wednesday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Wednesday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>       
+                        {% for class in wednesdayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}                        
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+                                    {% for k,v in datesList.items %}
+                                        {% if k == 'Wednesday' %}
+                                            <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}                                    
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Wednesday' %}
+                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>
+                    {% elif i == 1 %}
+                    <table>
+                        <th>Tuesday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Tuesday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>       
+                        {% for class in tuesdayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}                        
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+                                    {% for k,v in datesList.items %}
+                                        {% if k == 'Tuesday' %}
+                                            <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}                                    
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Tuesday' %}
+                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>     
+                    {% elif i == 0 %}
+                    <table>
+                        <th>Monday
+                            {% for k,v in datesList.items %}
+                                {% if k == 'Monday' %}
+                                    <br>{{v}}<br/>
+                                {% endif %}
+                            {% endfor %}
+                        </th>       
+                        {% for class in mondayList %}
+                        <form action="{% url 'reservations:reserve' %}" method="post">
+                        {% csrf_token %}                        
+                            <tr>
+                                <td>
+                                    <p>{{class.className}}</p>
+                                    <p>{{class.instructorName}}</p>
+                                    <p>{{class.startTime}} - {{class.endTime}}</p>
+                                    {% for k,v in datesList.items %}
+                                        {% if k == 'Monday' %}
+                                            <input name="date" type="hidden" value="{{v}}"></input>
+                                        {% endif %}
+                                    {% endfor %}                                    
+                                    <input name="className" type="hidden" value="{{class.className}}"></input>
+                                    <input name="startTime" type="hidden" value="{{class.startTime}}"></input>
+                                    <input name="endTime" type="hidden" value="{{class.endTime}}"></input>
+                                    <input name="instructorName" type="hidden" value="{{class.instructorName}}"></input>
+                                    <input name="dayOfWeek" type="hidden" value="{{class.dayOfWeek}}"></input>
+                                    <input name="classId" type="hidden" value="{{class.id}}"></input>
+                                    {% for k,v in availableDays.items %}
+                                        {% if k ==  'Monday' %}
+                                            <input name="{{class.id }}" type="submit" value="Create Reservation"></input>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </form>
+                        {% endfor %}
+                    </table>
+                    {% endif %}
+            {% endfor %}                             
+
+        <br/>
+        {{statement}}
+    </div>
+{% endblock %}

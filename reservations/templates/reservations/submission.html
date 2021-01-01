@@ -1,0 +1,15 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+    <div class="ReservationOutput">
+        {% for i in statement %}
+            <h3>{{i|linebreaks}}</h3>
+        {% endfor %}
+    </div>
+    <form class=site-form action="{% url 'accounts:home' %}" method="get">
+        <input type="submit" value="View Reservations">
+    </form>
+    <form class=site-form action="{% url 'fitnessClass:schedule' %}" method="get">
+        <input type="submit" value="View Class Schedule">
+    </form>    
+{% endblock %}
