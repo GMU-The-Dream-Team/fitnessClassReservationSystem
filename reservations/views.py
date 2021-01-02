@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from datetime import datetime, date, timedelta
-from . models import Reservation
+from . models import Reservation, WaitList
 from fitnessClass.models import FitnessClass
 from accounts.models import Customer
+from django.db.models import Q
+
 
 # Create your views here.
 def reserve_view(request):
@@ -41,13 +43,18 @@ def submission_view(request):
     reservationInstance.classReserved = fitnessClass
     reservationInstance.customerReserving = getCustomer(request)
     reservationInstance.classDate = dateFormated
+    reservationInstance.reservationDate = datetime.now().today()
+    reservationInstance.reservationTime = datetime.now().time()
 
     statement = []
     statement.append(f'Reservation made for \n{classDate}')
     statement.append(f'\n {reservationInstance.classReserved}')    
     statement.append(f'by {(reservationInstance.customerReserving)}')
 
-
+    temp_waitList = WaitList()
+    temp_waitList.save()
+    nId = temp_waitList.id
+    
     if int(max) > 9:
         if int(available) > 10:
             reservationInstance.reservationStatus = 'Reserved'
@@ -55,17 +62,27 @@ def submission_view(request):
             reservationInstance.reservationStatus = 'OverDraft'
         else:
             reservationInstance.reservationStatus = 'WaitList'
+            reservationInstance.waitNumber = nId
     else:
         if int(available) > 0:
             reservationInstance.reservationStatus = 'Reserved'
         else:
             reservationInstance.reservationStatus = 'WaitList'
+            reservationInstance.waitNumber = nId
+
     reservationInstance.save()
-    return render(request, 'reservations/submission.html', {'statement':statement})    
+    instanceId = reservationInstance.id
+
+    
+
+    waitCount = getWaitListPosition(dateFormated, nId)
+    statement.append(f'wait Count e= {waitCount}')
+
+    return render(request, 'reservations/submission.html', {'statement':statement, 'classId':classId})    
 
 def availability(classId, date):
     count = Reservation.objects.filter(reservationDate = date, classReserved = classId).count()
-    max = FitnessClass.objects.values_list('maximumCapacity', flat=True).get(id=classId)    
+    max = FitnessClass.objects.values_list('maximumCapacity', flat=True).get(id=classId)
     available = int(max) - count
     return (available, max)
 
@@ -81,3 +98,11 @@ def getCustomer(request):
         customer = i
     return customer
 
+def getWaitListPosition(dateOfClass, currentWaitNumber):
+    list = Reservation.objects.filter(classDate = dateOfClass)
+    count = 0
+    for line in list:
+        waitNumber = line.waitNumber
+        if waitNumber > 0 and waitNumber < currentWaitNumber:
+            count += 1
+    return count
