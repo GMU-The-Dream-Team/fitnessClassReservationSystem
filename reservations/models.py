@@ -13,7 +13,7 @@ class Reservation(models.Model):
     reservationStatus = models.CharField(max_length=20, default=None)
     reservationDate = models.DateField(default=None)
     reservationTime = models.TimeField(default=None)
-    waitNumber = models.IntegerField(max_length=20, default='0')
+    waitNumber = models.IntegerField(default='0')
 
     # Reservation Date = {self.reservationDate}, Reservation Time = {self.reservationTime}
     def __str__(self):

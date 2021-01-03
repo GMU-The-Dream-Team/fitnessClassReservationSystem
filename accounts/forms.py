@@ -13,5 +13,5 @@ class CustomerForm(forms.ModelForm):
             'street': _('Street Address'),
             'city': _('City'),
             'state': _('State'),
-            'zipcode': _('Zipcode')
+            'zipcode': _('Zipcode'),
         }

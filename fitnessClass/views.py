@@ -2,10 +2,11 @@ import datetime
 from accounts.models import Customer
 from django.shortcuts import render
 from . models import FitnessClass
-
+from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
 
 # Create your views here.
+@login_required(login_url="accounts:login")
 def schedule_view(request):
 
     sundayList = FitnessClass.objects.all().filter(dayOfWeek = 'Sunday').order_by('startTime')
@@ -20,6 +21,7 @@ def schedule_view(request):
     dayOrder = []
     datesList = {}
     availableDays = {}
+    (flag, value) = verifyCustomer(request)
 
     dayOrder.append(date.today().weekday())
     y = date.today().weekday()
@@ -32,12 +34,16 @@ def schedule_view(request):
     key = '' + days[y]    
     datesList[key] = ((date.today() + timedelta(1)).strftime('%m-%d-%Y'))
     availableDays[key] = f'{key}'
-
+    
     dayOrder.append((date.today() + timedelta(2)).weekday())
     y = (date.today() + timedelta(2)).weekday()
     key = '' + days[y]
     datesList[key] = ((date.today() + timedelta(2)).strftime('%m-%d-%Y'))
-    availableDays[key] = f'{key}'
+    if flag == True:    
+        availableDays[key] = f'{key}'
+    else:
+        availableDays['none'] = f'none'
+    statement = value
 
     dayOrder.append((date.today() + timedelta(3)).weekday())
     y = (date.today() + timedelta(3)).weekday()
@@ -59,7 +65,6 @@ def schedule_view(request):
     key = '' + days[y]    
     datesList[key] = ((date.today() + timedelta(6)).strftime('%m-%d-%Y'))
 
-    statement = ''
     rv = {
         'sundayList':sundayList,
         'mondayList':mondayList,
@@ -72,8 +77,21 @@ def schedule_view(request):
         'datesList':datesList,
         'dayOrder':dayOrder,
         'availableDays':availableDays,
+        'statement': statement
     }
     return render(request, 'fitnessClass/schedule.html', rv)
 
-def verifyAnnualResident():
-    return ''
+def verifyCustomer(request):
+    customerId = request.user.id
+    list = Customer.objects.all().filter(user = customerId)
+    customer = ''
+    for i in list:
+        customer = i
+
+    verification = customer.verified
+    if verification == 'Neither':
+        return (False, 'Non-Residents of Leesburg and Individuals without an annual membership may reserve a spot one day in advance of class')
+    elif verification == 'UnVerified':
+        return (True, 'Please Verify Residence/Membership Information with Front Desk Staff upon arrival')
+    else:
+        return (True, 'Annual PassHolder')    

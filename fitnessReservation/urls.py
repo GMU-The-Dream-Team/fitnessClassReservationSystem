@@ -6,7 +6,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('fitnessClass/', include('fitnessClass.urls')),
     path('reservations/', include('reservations.urls')),
-    path('', include('accounts.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('', include('fitnessClass.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()

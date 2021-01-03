@@ -46,3 +46,7 @@ border-radius:6px;
 font-size: 20px;
 font-weight: bold;
 }
+
+.wrapper .schedule{
+  display:inline-block;
+}

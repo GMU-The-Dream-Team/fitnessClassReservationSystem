@@ -4,9 +4,6 @@ from django.contrib.auth import login, logout
 from . import forms
 from . models import Customer
 
-def home_view(request):
-    return render(request, 'accounts/home.html')
-
 def signup_view(request):
     statement = ''
     if request.method == 'POST':
@@ -23,6 +20,7 @@ def signup_view(request):
                     instance.city = custForm.cleaned_data.get('city')
                     instance.state = custForm.cleaned_data.get('state')                
                     instance.zipcode = custForm.cleaned_data.get('zipcode')
+                    instance.verified = 'UnVerified'
                     instance.user = user
                     user = form.save()                                    
                     instance.save()
@@ -50,4 +48,4 @@ def login_view(request):
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('accounts:home')
+        return redirect('fitnessClass:schedule')

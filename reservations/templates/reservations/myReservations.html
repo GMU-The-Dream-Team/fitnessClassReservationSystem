@@ -1,0 +1,18 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+    <div class="MyReservations">
+
+        {% for k,v in reservations.items %}
+            <h3>{{v}}</h3>
+            <form class=cancel-form action="{% url 'reservations:myReservations' %}" method="post">
+                {% csrf_token %}
+                <input name="reservationId" type="hidden" value="{{k}}"></input>
+                <input type="submit" value="Cancel Reservation"></input>
+            </form>
+        {% endfor %}
+
+
+    </div>
+  
+{% endblock %}

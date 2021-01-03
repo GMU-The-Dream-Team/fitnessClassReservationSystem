@@ -4,5 +4,5 @@ from .import views
 app_name = 'fitnessClass'
 
 urlpatterns = [
-    path('schedule/', views.schedule_view, name='schedule'),
+    path('', views.schedule_view, name='schedule'),
 ]

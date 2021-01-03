@@ -13,9 +13,10 @@ class Customer(models.Model):
     verificationChoices = [
         ('Annual', 'Annual Pass Holder'),
         ('Resident', 'Town of Leesburg Resident'),
-        ('Not Verified', 'Not Verified')
+        ('Neither', 'Neither'),
+        ('UnVerified', 'UnVerified')
     ]
-    verfied = models.CharField(max_length=20, choices=verificationChoices, default="Not Verified")
+    verified = models.CharField(max_length=20, choices=verificationChoices)
 
     def __str__ (self):
         return f'{self.firstName} {self.lastName}'
