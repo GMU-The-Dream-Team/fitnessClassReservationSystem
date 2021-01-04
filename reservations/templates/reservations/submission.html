@@ -5,14 +5,10 @@
         {% for i in statement %}
             <h3>{{i|linebreaks}}</h3>
         {% endfor %}
-
-        {{classId}}
-        <br/><br/>
-
     </div>
     <form class=site-form action="{% url 'reservations:myReservations' %}" method="get">
         <input type="submit" value="View Reservations">
-    </form>
+    </form><br/>
     <form class=site-form action="{% url 'fitnessClass:schedule' %}" method="get">
         <input type="submit" value="View Class Schedule">
     </form>    

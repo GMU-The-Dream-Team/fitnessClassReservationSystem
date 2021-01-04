@@ -10,19 +10,19 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url="accounts:login")
 def reserve_view(request):
-    statement = ''
-    className = request.POST.get('className')
-    instructorName = request.POST.get('instructorName')
-    startTime = request.POST.get('startTime')
-    endTime = request.POST.get('endTime')
-    classDate = request.POST.get('date')
-    classId = request.POST.get('classId')
-    today = (date.today().strftime('%m-%d-%Y'))
     if request.method == 'POST':
+        statement = ''
+        className = request.POST.get('className')
+        instructorName = request.POST.get('instructorName')
+        startTime = request.POST.get('startTime')
+        endTime = request.POST.get('endTime')
+        classDate = request.POST.get('date')
+        classId = request.POST.get('classId')
+        today = (date.today().strftime('%m-%d-%Y'))
         availabilityTitle = 'Available Space'
         dateFormated = formatDate(classDate)        
         (available, max) = availability(classId, dateFormated)
-        if available < 0:
+        if available <= 0:
             temp_available = f'{-(available)}'
             available = temp_available
             availabilityTitle = 'Wait-List of'
@@ -72,16 +72,17 @@ def submission_view(request):
         else:
             reservationInstance.reservationStatus = 'WaitList'
             reservationInstance.waitNumber = nId
-
     reservationInstance.save()    
-    waitCount = getWaitListPosition(dateFormated, nId)
-    statement.append(f'Wait Count = {waitCount}')
+
+    waitList = getWaitListPosition(dateFormated, nId)
+    if waitList > 0:
+        statement.append(f'Wait Count = {waitList}')
 
     return render(request, 'reservations/submission.html', {'statement':statement, 'classId':classId})    
 
 @login_required(login_url="accounts:login")
 def myReservations_view(request):
-    returnValue = {}    
+    returnValue = []  
     if request.method == 'POST':
         reservationId = request.POST.get('reservationId')
         intId = Reservation.objects.all().filter(id = reservationId)
@@ -99,8 +100,8 @@ def myReservations_view(request):
     select = Reservation.objects.all().filter(customerReserving = customerId).order_by('-classDate')
     for i in select:
         if i.reservationDate >= todaysDate:
-            returnValue[i.id] = f'{i}'
-
+            returnValue.append(i)
+    
     return render(request, 'reservations/myReservations.html', {'reservations':returnValue})
 
 def availability(classId, date):
