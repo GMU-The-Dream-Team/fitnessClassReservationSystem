@@ -22,11 +22,27 @@ def reserve_view(request):
         availabilityTitle = 'Available Space'
         dateFormated = formatDate(classDate)        
         (available, max) = availability(classId, dateFormated)
-        if available <= 0:
+        if available < 1:
             temp_available = f'{-(available)}'
             available = temp_available
-            availabilityTitle = 'Wait-List of'
-        return render(request, 'reservations/reserve.html', {'statement': statement, 'className':className, 'instructorName':instructorName, 'startTime':startTime, 'endTime':endTime, 'classDate':classDate , 'today': today, 'availabilityTitle': availabilityTitle, 'available':available, 'max':max, 'classId':classId })
+            availabilityTitle = 'Position on WaitList'
+            available = (int(available) + 1)
+        (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
+        rv = {
+            'statement': statement,
+            'className':className,
+            'instructorName':instructorName,
+            'startTime':startTime,
+            'endTime':endTime,
+            'classDate':classDate ,
+            'today': today,
+            'availabilityTitle': availabilityTitle,
+            'available':available,
+            'classId':classId,
+            'duplicate':duplicate,
+            'duplicateMessage':duplicateMessage
+        }
+        return render(request, 'reservations/reserve.html', rv)
     else:
         return redirect('fitnessClass:schedule')
 
@@ -76,9 +92,9 @@ def submission_view(request):
 
     waitList = getWaitListPosition(dateFormated, nId)
     if waitList > 0:
-        statement.append(f'Wait Count = {waitList}')
+        statement.append(f'Wait List Position: {waitList + 1}')
 
-    return render(request, 'reservations/submission.html', {'statement':statement, 'classId':classId})    
+    return render(request, 'reservations/submission.html', {'statement':statement})    
 
 @login_required(login_url="accounts:login")
 def myReservations_view(request):
@@ -90,7 +106,6 @@ def myReservations_view(request):
         for i in intId:
             temp_id = i.id
         Reservation.objects.filter(id = temp_id).delete()
- 
     currentUser = request.user
     customer = Customer.objects.all().filter(user = currentUser)
     customerId = ''
@@ -100,8 +115,7 @@ def myReservations_view(request):
     select = Reservation.objects.all().filter(customerReserving = customerId).order_by('-classDate')
     for i in select:
         if i.reservationDate >= todaysDate:
-            returnValue.append(i)
-    
+            returnValue.append(i) 
     return render(request, 'reservations/myReservations.html', {'reservations':returnValue})
 
 def availability(classId, date):
@@ -122,6 +136,13 @@ def getCustomer(request):
         customer = i
     return customer
 
+def getFitnessClass(classId):
+    list = FitnessClass.objects.all().filter(id = classId)
+    fitnessClass = ''
+    for i in list:
+        fitnessClass = i
+    return fitnessClass
+
 def getWaitListPosition(dateOfClass, currentWaitNumber):
     list = Reservation.objects.filter(classDate = dateOfClass)
     count = 0
@@ -130,3 +151,10 @@ def getWaitListPosition(dateOfClass, currentWaitNumber):
         if waitNumber > 0 and waitNumber < currentWaitNumber:
             count += 1
     return count
+
+def checkDuplicateReservation(customer, dateOfClass, classId):
+    count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
+    if count > 0 :
+        return (True, f'Duplicate Reservation, current count of reservations = {count}')
+    else:
+        return (False, f'Not a Duplicate Reservation, current count of reservations = {count}')

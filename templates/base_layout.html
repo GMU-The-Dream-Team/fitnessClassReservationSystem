@@ -6,29 +6,45 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Ida Reserve</title>
         <link rel="stylesheet" href="{% static 'styles.css' %}">
-        <nav> 
-            <ul>
-                {% if user.is_authenticated %}
-                <li>
-                    <form class="logout-link" action="{% url 'accounts:logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Logout</button>
-                    </form>
-                </li>
-                {% else %}
-                    <li>
-                        <a href="{% url 'accounts:login' %}">Login</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'accounts:signup' %}">Signup</a>                    
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
     </head>
       
     <body>
-        <div class="wrapper">
+        <header class="wrapper">
+            <div class="logo">
+                <h1>
+                    <a href = "{% url 'fitnessClass:schedule' %}">
+                        <img src="{% static 'logo.jfif' %}" alt="Schedule">
+                    </a>
+                </h1>  
+            </div>                  
+            <nav> 
+                <ul>
+                    {% if user.is_authenticated %}
+                    <ul>
+                        <form class="logout-link" action="{% url 'accounts:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    </ul>
+                    {% else %}
+                        <ul>
+                            <form class="login-link" action="{% url 'accounts:login' %}" method="get">
+                                {% csrf_token %}
+                                <button type="submit">Login</button>
+                            </form>
+                        </ul>
+                        <ul>
+                            <form class="signup-link" action="{% url 'accounts:signup' %}" method="get">
+                                {% csrf_token %}
+                                <button type="submit">Signup</button>
+                            </form>
+                        </ul>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+            
+        <div class="wrapper">    
             {% block content %}
             {% endblock %}
         </div>

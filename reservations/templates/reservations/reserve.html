@@ -23,7 +23,10 @@
                 <input name="classId" type="hidden" value="{{classId}}"></input>
                 <input name="classDate" type="hidden" value="{{classDate}}"></input>  
                 <input name="date" type="hidden" value="{{today}}"></input>
-                <input type="submit" value="Reserve">
+
+                {% if duplicate == False %}
+                    <input type="submit" value="Reserve">
+                {% endif %}
             </form>            
             <input type="button" value="Cancel" onclick="history.back()">
         </div><br/>
@@ -31,13 +34,10 @@
             <table>
                 <caption>{{classDate}}</caption>
                 <th> {{availabilityTitle}}</th>
-                <th>Partcipants Allowed</th>
                 <tr>
                     <td>{{available}}</td>
-                    <td>{{max}}</td>
                 </tr>
             </table>
         </div>
     </div><br/>
-    {{statement}}
 {% endblock %}
