@@ -155,6 +155,6 @@ def getWaitListPosition(dateOfClass, currentWaitNumber):
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
     if count > 0 :
-        return (True, f'Duplicate Reservation, current count of reservations = {count}')
+        return (True, f'You have already reserved for this class')
     else:
-        return (False, f'Not a Duplicate Reservation, current count of reservations = {count}')
+        return (False, '')

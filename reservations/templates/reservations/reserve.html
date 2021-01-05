@@ -24,10 +24,16 @@
                 <input name="classDate" type="hidden" value="{{classDate}}"></input>  
                 <input name="date" type="hidden" value="{{today}}"></input>
 
-                {% if duplicate == False %}
+            {% if duplicate == False %}
                     <input type="submit" value="Reserve">
-                {% endif %}
-            </form>            
+                </form>
+            {% else %}
+                </form>
+                <p>{{duplicateMessage}}</p>
+                <form action="{% url 'reservations:myReservations' %}">
+                    <input type="submit" value="View Reservations"/>
+                </form>
+            {% endif %}            
             <input type="button" value="Cancel" onclick="history.back()">
         </div><br/>
         <div class="availabilityTable">
