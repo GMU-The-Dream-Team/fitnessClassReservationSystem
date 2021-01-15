@@ -7,43 +7,54 @@
         <title>Ida Reserve</title>
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
-      
+           
     <body>
-        <header class="wrapper">
-            <div class="logo">
-                <h1>
-                    <a href = "{% url 'fitnessClass:schedule' %}">
-                        <img src="{% static 'logo.jfif' %}" alt="Schedule">
-                    </a>
-                </h1>  
-            </div>                  
+        <header>
+            <a href = "{% url 'fitnessClass:schedule' %}">
+                <img src="{% static 'logo.jfif' %}" alt="Schedule">
+            </a>
             <nav> 
                 <ul>
                     {% if user.is_authenticated %}
-                    <ul>
-                        <form class="logout-link" action="{% url 'accounts:logout' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">Logout</button>
-                        </form>
-                    </ul>
+                        {% if user.is_staff %}
+                            <li>
+                                <form class="staffReservations" action="{% url 'reservations:staffReservations' %}" method="get">
+                                    {% csrf_token %}
+                                    <button type="submit">Staff Reservation View</button>
+                                </form>
+                            </li>    
+                        {% else %}                    
+                            <li>
+                                <form class="myReservations" action="{% url 'reservations:myReservations' %}" method="get">
+                                    {% csrf_token %}
+                                    <button type="submit">My Reservations</button>
+                                </form>
+                            </li>
+                        {% endif %} 
+                        <li>
+                            <form class="logout-link" action="{% url 'accounts:logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>                                                           
                     {% else %}
-                        <ul>
-                            <form class="login-link" action="{% url 'accounts:login' %}" method="get">
-                                {% csrf_token %}
-                                <button type="submit">Login</button>
-                            </form>
-                        </ul>
-                        <ul>
-                            <form class="signup-link" action="{% url 'accounts:signup' %}" method="get">
-                                {% csrf_token %}
-                                <button type="submit">Signup</button>
-                            </form>
-                        </ul>
+                    <li>
+                        <form class="login-link" action="{% url 'accounts:login' %}" method="get">
+                            {% csrf_token %}
+                            <button type="submit">Login</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form class="signup-link" action="{% url 'accounts:signup' %}" method="get">
+                            {% csrf_token %}
+                            <button type="submit">Signup</button>
+                        </form>
+                    </li>
                     {% endif %}
                 </ul>
-            </nav>
-        </header>
-            
+            </nav>                        
+        </header>        
+       
         <div class="wrapper">    
             {% block content %}
             {% endblock %}

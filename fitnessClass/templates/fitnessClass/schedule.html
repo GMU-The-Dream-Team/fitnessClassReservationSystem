@@ -1,8 +1,9 @@
 {% extends 'base_layout.html' %}
 
 {% block content%}
-    <h1>Weekly Fitness Class Schedule</h1>
     <div class="schedule">
+
+        <h1>Weekly Fitness Class Schedule</h1>
 
         {% for i in dayOrder %}
                     {% if i == 6 %}
@@ -37,7 +38,7 @@
 
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Sunday' %}
-                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
 
@@ -77,7 +78,7 @@
                                     <input name="classId" type="hidden" value="{{class.id}}"></input>
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Saturday' %}
-                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -115,7 +116,7 @@
                                     <input name="classId" type="hidden" value="{{class.id}}"></input>
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Friday' %}
-                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -153,7 +154,7 @@
                                     <input name="classId" type="hidden" value="{{class.id}}"></input>
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Thursday' %}
-                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -191,7 +192,7 @@
                                     <input name="classId" type="hidden" value="{{class.id}}"></input>
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Wednesday' %}
-                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -229,7 +230,7 @@
                                     <input name="classId" type="hidden" value="{{class.id}}"></input>
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Tuesday' %}
-                                            <input name="{{class.id}}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -267,7 +268,7 @@
                                     <input name="classId" type="hidden" value="{{class.id}}"></input>
                                     {% for k,v in availableDays.items %}
                                         {% if k ==  'Monday' %}
-                                            <input name="{{class.id }}" type="submit" value="Create Reservation"></input>
+                                            <input name="{{class.id}}" type="submit" value="Reserve"></input>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -277,7 +278,6 @@
                     </table>
                     {% endif %}
             {% endfor %}                             
-
         <br/>
     </div>
 

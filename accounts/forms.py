@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = models.Customer
-        fields = ['email', 'firstName', 'lastName', 'street', 'city', 'state', 'zipcode']
+        fields = ['email', 'firstName', 'lastName', 'street', 'city', 'state', 'zipcode', 'phoneNumber']
         labels = {
             'email': _('Email'),
             'firstName' : _('First Name'),
@@ -14,4 +14,5 @@ class CustomerForm(forms.ModelForm):
             'city': _('City'),
             'state': _('State'),
             'zipcode': _('Zipcode'),
+            'phoneNumber': _('Phone Number')
         }

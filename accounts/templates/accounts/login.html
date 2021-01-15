@@ -1,7 +1,7 @@
 {% extends 'base_layout.html' %}
 
 {% block content%}
-    <div class=" ">
+    <div class="login-panel">
         <h1>Log In</h1>
         <form class=site-form action="{% url 'accounts:login' %}" method="post">
             {% csrf_token %}

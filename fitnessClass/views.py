@@ -21,7 +21,12 @@ def schedule_view(request):
     dayOrder = []
     datesList = {}
     availableDays = {}
-    (flag, value) = verifyCustomer(request)
+    
+    if(request.user.is_staff):
+        flag = True
+        value = ''
+    else:
+        (flag, value) = verifyCustomer(request)
 
     dayOrder.append(date.today().weekday())
     y = date.today().weekday()

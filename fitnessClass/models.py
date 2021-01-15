@@ -83,4 +83,4 @@ class FitnessClass(models.Model):
     maximumCapacity = models.CharField(max_length=20)
 
     def __str__(self):
-        return f'{self.className} with {self.instructorName} \n {self.dayOfWeek} \n @  {self.startTime} - {self.endTime}'
+        return f'id = {self.id}, {self.className} with {self.instructorName} \n {self.dayOfWeek} \n @  {self.startTime} - {self.endTime}'

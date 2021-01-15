@@ -20,6 +20,7 @@ def signup_view(request):
                     instance.city = custForm.cleaned_data.get('city')
                     instance.state = custForm.cleaned_data.get('state')                
                     instance.zipcode = custForm.cleaned_data.get('zipcode')
+                    instance.phoneNumber = custForm.cleaned_data.get('phoneNumber')
                     instance.verified = 'UnVerified'
                     instance.user = user
                     user = form.save()                                    
