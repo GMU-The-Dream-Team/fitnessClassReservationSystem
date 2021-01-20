@@ -139,7 +139,6 @@ def staffReservations_view(request):
         reservedList = {}
         waitList = {}
         overDraftList = {}
-        classIdList = {}
         #enter code to send back the classes ID and present the staff memebers with the table 
         counter = 0
         reservedCounter = 0
@@ -218,6 +217,37 @@ def getWaitListPosition(dateOfClass, currentWaitNumber):
         if waitNumber > 0 and waitNumber < currentWaitNumber:
             count += 1
     return count
+
+def cancelFunction(dateOfClass, currentWaitNumber):
+    list = Reservation.objects.filter(classDate = dateOfClass)
+    waitList = []
+    id = ''
+    for line in list:
+        waitNumber = line.waitNumber
+        if waitNumber > 0 and waitNumber < currentWaitNumber:
+            tempWait = min(waitList)
+            if waitNumber < tempWait:
+                id = line.id
+    return id
+
+def cancelReservationFunction(request):
+    reservationId = request.POST.get('reservationId')
+    intId = Reservation.objects.all().filter(id = reservationId)
+    temp_id = None
+    waitlistMin = None
+    for i in intId:
+        
+
+        '''
+        if temp_id == None:
+            waitlistMin = i.waitNumber
+            temp_id = i.id
+        elif i.waitNumber < waitlistMin:
+            waitlistMin = i.waitNumber
+            temp_id = i.id
+        '''
+
+    Reservation.objects.filter(id = temp_id).delete()
 
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()

@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+.banner {
+	width: auto;
+	height: auto;
+
+	
+}
+.imgmax{
+	max-width: 100%;
+	height: auto;
+	display:block;
+	margin: 0 auto;
+}
+
+.bg-logo{
+	background-color: #005C9A;
+	color: #fff!important;
+}
+
+.logo{
+	max-width: 350px;
+	background-color: #005C9A;
+}
+.logotext{
+	color: #fff!important;
+	margin-left: 5px;
+}
+.menutext{
+	color: #fff!important;
+	
+}

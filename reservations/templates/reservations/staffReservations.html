@@ -22,59 +22,66 @@
         </table>
         {{statement}}
     {% else %}
+        {% if reservedCounter > 0%}
+            <table>
+                <h2>Reserved List</h2>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone Number</th>
+                <th>Date Reserved</th>
+                {% if reservedCounter > 0 %}
+                    {% for k, v in reservedList.items %}
+                        <tr>
+                            <td>
+                                {{v.customerReserving.firstName}}
+                            </td>
+                            <td>
+                                {{v.customerReserving.lastName}}
+                            </td>
+                            <td>
+                                {{v.customerReserving.phoneNumber}}
+                            </td>
+                            <td>
+                                {{v.reservationDate}}
+                            </td>                                    
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <p> No reservations made for this class</p>
+                {% endif %}
+            </table>
+        {% endif %}
+
+        {% if overDraftCounter > 0 %}
         <table>
-            <h2>Reserved List</h2>
+            <h2>Overdraft List</h2>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Phone Number</th>
             <th>Date Reserved</th>
-            {% if reservedCounter > 0 %}
-                {% for k, v in reservedList.items %}
-                    <tr>
-                        <td>
-                            {{v.customerReserving.firstName}}
-                        </td>
-                        <td>
-                            {{v.customerReserving.lastName}}
-                        </td>
-                        <td>
-                            {{v.customerReserving.firstName}}
-                        </td>                                        
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <p> No reservations made for this class</p>
-            {% endif %}
+            {% for k, v in overDraftList.items %}
+                <tr>
+                    <td>
+                        {{v}}
+                    </td>
+                </tr>
+            {% endfor %}
         </table>
-        <table>
-            <th>OverDraft List</th>
-            {% if overDraftCounter > 0 %}
-                {% for k, v in overDraftList.items %}
-                    <tr>
-                        <td>
-                            {{v}}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <p> No over draft for this class</p>
-            {% endif %}
-        </table>
-        <table>
-            <th>Wait List</th>
-            {% if waitListCounter > 0 %}
-                {% for k, v in waitList.items %}
-                    <tr>
-                        <td>
-                            {{v}}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <p> No wait list for this class</p>
-            {% endif %}
-        </table>        
-        {{statement}}
+        {% endif %}
+
+        {% if waitListCounter > 0 %}
+            <table>
+                <th>Wait List</th>
+                    {% for k, v in waitList.items %}
+                        <tr>
+                            <td>
+                                {{v}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+            </table>  
+        {% endif %}
+
     {% endif %}
 {% endblock %}
 
