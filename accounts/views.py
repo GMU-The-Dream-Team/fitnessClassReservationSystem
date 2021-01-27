@@ -47,6 +47,7 @@ def login_view(request):
     return render(request, 'accounts/login.html', { 'form': form })
 
 def logout_view(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         logout(request)
-        return redirect('fitnessClass:schedule')
+        form = AuthenticationForm
+        return render(request, 'accounts/login.html', {'form':form})

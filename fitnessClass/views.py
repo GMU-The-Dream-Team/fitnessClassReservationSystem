@@ -95,8 +95,8 @@ def verifyCustomer(request):
 
     verification = customer.verified
     if verification == 'Neither':
-        return (False, 'Non-Residents of Leesburg and Individuals without an annual membership may reserve a spot one day in advance of class')
+        return (False, '* Non-Residents of Leesburg and Individuals without an annual membership may reserve for classes one day in advance')
     elif verification == 'UnVerified':
-        return (True, 'Please Verify Residence/Membership Information with Front Desk Staff upon arrival')
+        return (True, '* Please verify proof of residence/membership with front desk staff when checking in')
     else:
-        return (True, 'Annual PassHolder')    
+        return (True, '')    

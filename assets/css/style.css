@@ -1,13 +1,120 @@
 @charset "utf-8";
 /* CSS Document */
-.banner {
-	width: auto;
-	height: auto;
 
-	
+
+/* Wajaat Start */
+body{
+
+}h2{
+	font-style: italic;
+}
+
+.main-block {
+  max-width: 100%;
+  height: 100%;  
+  margin: 3% auto;
+}
+
+.login-panel h1{
+  padding-top: 5%;
+}
+
+.site-form {
+    margin: 0 auto;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.site-form input, .site-form textarea{
+    display: block;
+    margin: 20px 0 0px 0;
+    padding: 10px;
+}
+
+.reserve .reservationStub{
+float: left;
+}
+
+.reserve .availabilityTable{
+float:right;  
+}
+
+.availabilityTable table, tr, th{
+border: 1px solid black;
+border-radius:6px;
+}
+
+.availabilityTable caption{
+font-size: 20px;
+font-weight: bold;
+}
+
+.schedule-statement{
+	text-align: center;
+}
+
+.btn{
+	margin-left:10px;
+}
+
+#navButtons li{
+  margin: 2% auto auto ;
+}
+
+.thead{
+	background-color:  #005C9A;
+	text-align: center;
+}
+th{
+	color: white;
+}
+
+.signup-form{
+	max-width: 100%;
+	border: 1px solid black;
+	padding: 3%
+}
+
+
+.signup-panel{
+    display: flex;
+    margin: 2% 2% 2% 2%;
+}
+.flex-child {
+    flex: 1;   
+}  
+
+.flex-child:first-child {
+    margin-right: 21%;
+}
+
+.flex-child p{
+	padding-bottom: 5%
+}
+
+.create-button{
+	margin: 3% 2% 3% 2%;
+}
+
+.vertical-line{ 
+    border-right: 1px solid grey; 
+    height: 600px; 
+    position:absolute; 
+    left: 50%;
+} 
+
+#footer{
+  margin: 3% auto auto auto;
+}
+/* Wajaat End */
+
+
+.banner {
+	width: 100%;
+	height: auto;	
 }
 .imgmax{
-	max-width: 100%;
+	width: 100%;
 	height: auto;
 	display:block;
 	margin: 0 auto;
@@ -28,5 +135,11 @@
 }
 .menutext{
 	color: #fff!important;
-	
+}
+
+#credits {
+	margin: 3% auto;
+	position: absolute;
+	bottom: auto;
+	width: 100%;
 }

@@ -18,4 +18,3 @@ class Reservation(models.Model):
     # Reservation Date = {self.reservationDate}, Reservation Time = {self.reservationTime}
     def __str__(self):
         return f'Class Reserved = {self.classReserved}, Customer Reserving {self.customerReserving}, Class Date = {self.classDate}, waitNumber = {self.waitNumber}'
-        

@@ -230,25 +230,6 @@ def cancelFunction(dateOfClass, currentWaitNumber):
                 id = line.id
     return id
 
-def cancelReservationFunction(request):
-    reservationId = request.POST.get('reservationId')
-    intId = Reservation.objects.all().filter(id = reservationId)
-    temp_id = None
-    waitlistMin = None
-    for i in intId:
-        
-
-        '''
-        if temp_id == None:
-            waitlistMin = i.waitNumber
-            temp_id = i.id
-        elif i.waitNumber < waitlistMin:
-            waitlistMin = i.waitNumber
-            temp_id = i.id
-        '''
-
-    Reservation.objects.filter(id = temp_id).delete()
-
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
     if count > 0 :
