@@ -1,17 +1,16 @@
 {% extends 'base_layout.html' %}
 
 {% block content%}
-    <h1>Reserve Spot in a Fitness Class</h1>
     <div class="reserve">
         <div class="reservationStub">
             <h2> Confirm Reservation </h2>
             <form action="{% url 'reservations:submission' %}" method="post">
                 {% csrf_token %}
 
-                <h3>{{className}}</h3>
-                <h3>{{instructorName}}</h3>
-                <h3>{{startTime}} - {{endTime}}</h3>
-                <h3>Todays Date = {{today}}</h3>
+                <h4>{{className}}</h4>
+                <h5>{{instructorName}}</h5>
+                <h6>{{startTime}} - {{endTime}}</h6>
+                <h6>Todays Date = {{today}}</h6>
 
                 <input name="className" type="hidden" value="{{className}}"></input>
                 <input name="startTime" type="hidden" value="{{startTime}}"></input>
@@ -44,5 +43,5 @@
                 </tr>
             </table>
         </div>
-    </div><br/>
+    </div>
 {% endblock %}

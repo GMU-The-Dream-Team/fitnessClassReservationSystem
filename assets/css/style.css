@@ -3,9 +3,8 @@
 
 
 /* Wajaat Start */
-body{
-
-}h2{
+title{}
+h1{
 	font-style: italic;
 }
 
@@ -29,14 +28,6 @@ body{
     display: block;
     margin: 20px 0 0px 0;
     padding: 10px;
-}
-
-.reserve .reservationStub{
-float: left;
-}
-
-.reserve .availabilityTable{
-float:right;  
 }
 
 .availabilityTable table, tr, th{
@@ -106,6 +97,23 @@ th{
 #footer{
   margin: 3% auto auto auto;
 }
+
+
+/* Reserve.html*/
+
+.reserve{
+	background-color: lightblue;
+}
+.reservationStub{
+	background-color:orange;
+	max-width: 50%;
+}
+.availabilityTable{
+	background-color:orange;
+	max-width: 50%;
+}
+
+
 /* Wajaat End */
 
 
