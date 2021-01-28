@@ -1,4 +1,4 @@
-from datetime import date, time
+from datetime import date
 from django.db.models.fields import DateField
 from django.shortcuts import render, redirect
 from datetime import datetime, date, timedelta
@@ -233,6 +233,6 @@ def cancelFunction(dateOfClass, currentWaitNumber):
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
     if count > 0 :
-        return (True, f'You have already reserved for this class')
+        return (True, f'* You have already reserved for this class')
     else:
         return (False, '')

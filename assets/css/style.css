@@ -3,8 +3,7 @@
 
 
 /* Wajaat Start */
-title{}
-h1{
+title h1{
 	font-style: italic;
 }
 
@@ -74,11 +73,9 @@ th{
 .flex-child {
     flex: 1;   
 }  
-
 .flex-child:first-child {
     margin-right: 21%;
 }
-
 .flex-child p{
 	padding-bottom: 5%
 }
@@ -102,18 +99,40 @@ th{
 /* Reserve.html*/
 
 .reserve{
-	background-color: lightblue;
+	display: flex;
+	border: 1px solid black;
 }
-.reservationStub{
-	background-color:orange;
-	max-width: 50%;
+.flex-child{
+	margin: 2% 2% 2%;
 }
-.availabilityTable{
-	background-color:orange;
-	max-width: 50%;
+.flex-child:first-child {
+    margin-left: 15%;
+}
+.flex-child:nth-child(2){
+	margin-right: 15%;
 }
 
+#reserve-form{
+    padding-bottom: 5%
+}
 
+#reserve-form h2,h3, h4, h5, h6{
+	padding-bottom: 5%
+}
+
+#availability-table{
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+#availability-table th{
+	color: black;
+	padding: 1%
+}
+#availability-table td{
+	color: red;
+	font-size: 30px;
+}
 /* Wajaat End */
 
 
