@@ -29,7 +29,7 @@
                 <input name="classDate" type="hidden" value="{{classDate}}"></input>  
                 <input name="date" type="hidden" value="{{today}}"></input>
             
-            {% if classPassedFlag == True %}
+            {% if classPassedFlag == False %}
                 </form>
                 <p id="duplicate-message">{{classPassedMessage}}</p>
                 <p>
@@ -37,18 +37,20 @@
                         <input type="submit" value="View Reservations"/>
                     </form>
                 </p>
-            {% elif duplicate == False %}
-                   <p><input type="submit" value="Reserve"></p>
-                </form>
             {% else %}
-                </form>
-                <p id="duplicate-message">{{duplicateMessage}}</p>
-                <p>
-                    <form action="{% url 'reservations:myReservations' %}">
-                        <input type="submit" value="View Reservations"/>
+                {% if duplicate == False %}
+                    <p><input type="submit" value="Reserve"></p>
                     </form>
-                </p>
-            {% endif %}            
+                {% else %}
+                    </form>
+                    <p id="duplicate-message">{{duplicateMessage}}</p>
+                    <p>
+                        <form action="{% url 'reservations:myReservations' %}">
+                            <input type="submit" value="View Reservations"/>
+                        </form>
+                    </p>
+                {% endif %}            
+            {% endif %}
             <input type="button" value="Return to Class Schedule" onclick="history.back()">
         </div>
         <div class="flex-child">

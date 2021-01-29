@@ -241,29 +241,31 @@ def checkDuplicateReservation(customer, dateOfClass, classId):
         return (False, '')
 
 def checkClassPassed(fitnessClass, classDate):
-    returnedStartTime = FitnessClass.objects.values_list('startTime', flat=True).filter(id = fitnessClass.id, )
+    returnedStartTime = FitnessClass.objects.values_list('startTime', flat=True).filter(id = fitnessClass.id)
     given_time = returnedStartTime[0] #fitness class start time
     now = datetime.now()
     current_time = now.strftime('%I:%M %p')
     t = ''
 
-    # '05:00 AM'
     (flag, value) = checkDate(classDate)
     if flag == True:
         if given_time[6:8] == 'AM' and current_time[6:8] == 'PM':
-            t = '* Reservation for past classes cannot be made.'
+            t = '* Reservation for past class cannot be made.'
+            flag = False
         else: # same part of day
-            if int(given_time[0:2]) < int(current_time[0:2]): # compare Hour
-                t = '* Reservation for past classes cannot be made.'
-            elif int(given_time[0:2]) > int(current_time[0:2]):
-                t = ''
+            if int(given_time[0:2]) > int(current_time[0:2]): # compare Hour
+                t = '1 * Can Reserve'
+            elif int(given_time[0:2]) < int(current_time[0:2]):
+                t = 'Unable to reserve for classes in the past'
+                flag = False
             else:
-                if int(given_time[3:5]) < int(current_time[3:5]): # compare Minute
-                    t = '* Reservation for past classes cannot be made.'
-                elif int(given_time[3:5]) > int(current_time[3:5]):
+                if int(given_time[3:5]) > int(current_time[3:5]): # compare Minute
                     t = ''
+                elif int(given_time[3:5]) < int(current_time[3:5]):
+                    flag = False
+                    t = 'Unable to reserve, this class has already started'
                 else:
-                    t = ''
+                    flag = False
     else:
         t = f'{value}'
  

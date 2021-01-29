@@ -55,8 +55,13 @@ font-weight: bold;
 	background-color:  #005C9A;
 	text-align: center;
 }
-th{
+
+.thead th{
 	color: white;
+}
+
+.tbody{
+	text-align: center;
 }
 
 .signup-form{
