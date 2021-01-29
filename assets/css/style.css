@@ -101,6 +101,8 @@ th{
 .reserve{
 	display: flex;
 	border: 1px solid black;
+	width: 85%;
+	margin: auto;
 }
 .flex-child{
 	margin: 2% 2% 2%;
@@ -132,6 +134,9 @@ th{
 #availability-table td{
 	color: red;
 	font-size: 30px;
+}
+#duplicate-message{
+	color: red;
 }
 /* Wajaat End */
 

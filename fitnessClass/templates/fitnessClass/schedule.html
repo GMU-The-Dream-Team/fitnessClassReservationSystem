@@ -90,7 +90,7 @@
                                         <td>{{class.instructorName}}</td>
                                         <td>{{class.startTime}} - {{class.endTime}}</td>
                                             {% for k,v in datesList.items %}
-                                                {% if k == 'Saturday' %}
+                                                {% if k == 'Friday' %}
                                                     <input name="date" type="hidden" value="{{v}}"></input>
                                                     <td>{{v}}</td>
                                                 {% endif %}

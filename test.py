@@ -1,18 +1,29 @@
-from datetime import datetime, date, timedelta
+t1 = '07:00 PM'
+t2 = '05:00 PM'
+t3 = '11:00 AM'
 
-def formatDate(date):
-    dateStr = date[6:11] + '-' + date[0:2] + '-' + date[3:5]
-    return (dateStr)
+currentTime = t1
+returnedValue = t2
 
-today = '01-01-2021'
+if currentTime[6:8] == 'AM' and returnedValue[6:8] == 'PM':
+    t = 'current time is before '
 
-today = formatDate(today)
-print(today)
+   '''
+    if given_time[5:7] == 'AM' and current_time == 'PM':
+        print(True)
+    elif given_time[5:7] == 'PM' and current_time == 'AM':
+        print(False)
+    else: # same part of day
+        if int(given_time[0:2]) < int(current_time[0:2]): # compare Hour
+            print(True)
+        elif int(given_time[0:2]) > int(current_time[0:2]):
+            print(False)
+        else:
+            if int(given_time[3:5]) < int(current_time[3:5]): # compare Minute
+                print(True)
+            elif int(given_time[3:5]) > int(current_time[3:5]):
+                print(False)
+            else:
+                print("Times are the same")
+    '''
 
-todayDate = date.today()
-todayDateStr = date.today().strftime('%Y-%m-%d')
-
-if today < todayDateStr:
-    print ('today is lesss than todayDate')
-else:
-    print('Today greater than todayDate')

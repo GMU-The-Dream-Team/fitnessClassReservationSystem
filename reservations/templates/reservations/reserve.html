@@ -14,7 +14,7 @@
             <form id="reserve-form" action="{% url 'reservations:submission' %}" method="post">
                 {% csrf_token %}
 
-                <h4>{{className}}</h4>
+                <h3>{{className}}</h3>
                 <h5>{{instructorName}}</h5>
                 <h6>{{startTime}} - {{endTime}}</h6>
                 <h6>Todays Date = {{today}}</h6>
@@ -28,8 +28,16 @@
                 <input name="classId" type="hidden" value="{{classId}}"></input>
                 <input name="classDate" type="hidden" value="{{classDate}}"></input>  
                 <input name="date" type="hidden" value="{{today}}"></input>
-
-            {% if duplicate == False %}
+            
+            {% if classPassedFlag == True %}
+                </form>
+                <p id="duplicate-message">{{classPassedMessage}}</p>
+                <p>
+                    <form action="{% url 'reservations:myReservations' %}">
+                        <input type="submit" value="View Reservations"/>
+                    </form>
+                </p>
+            {% elif duplicate == False %}
                    <p><input type="submit" value="Reserve"></p>
                 </form>
             {% else %}
@@ -45,7 +53,7 @@
         </div>
         <div class="flex-child">
             <table id="availability-table">
-                <th>{{availabilityTitle}} on {{classDate}}</th>
+                <th>{{availabilityTitle}} on <br/>{{classDate}}</th>
                 <tr>
                     <td>{{available}}</td>
                 </tr>

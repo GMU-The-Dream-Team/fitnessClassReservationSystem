@@ -1,4 +1,5 @@
 from datetime import date
+from django.utils import timezone
 from django.db.models.fields import DateField
 from django.shortcuts import render, redirect
 from datetime import datetime, date, timedelta
@@ -29,6 +30,7 @@ def reserve_view(request):
             availabilityTitle = 'Position on WaitList'
             available = (int(available) + 1)
         (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
+        (classPassedFlag, classPassedMessage) = checkClassPassed(getFitnessClass(classId), dateFormated)
         rv = {
             'statement': statement,
             'className':className,
@@ -41,7 +43,9 @@ def reserve_view(request):
             'available':available,
             'classId':classId,
             'duplicate':duplicate,
-            'duplicateMessage':duplicateMessage
+            'duplicateMessage':duplicateMessage,
+            'classPassedFlag': classPassedFlag,
+            'classPassedMessage': classPassedMessage
         }
         return render(request, 'reservations/reserve.html', rv)
     else:
@@ -185,7 +189,6 @@ def formatDate(date):
     return (dateStr)
 
 def checkDate(dateOfClass):
-    #classDate = dateOfClass[6:11] + '-' + dateOfClass[0:2] + '-' + dateOfClass[3:5]
     temp_classDate = str(dateOfClass)
     classDate = temp_classDate[0:10]
     todayDate = date.today().strftime('%Y-%m-%d')
@@ -236,3 +239,32 @@ def checkDuplicateReservation(customer, dateOfClass, classId):
         return (True, f'* You have already reserved for this class')
     else:
         return (False, '')
+
+def checkClassPassed(fitnessClass, classDate):
+    returnedStartTime = FitnessClass.objects.values_list('startTime', flat=True).filter(id = fitnessClass.id, )
+    given_time = returnedStartTime[0] #fitness class start time
+    now = datetime.now()
+    current_time = now.strftime('%I:%M %p')
+    t = ''
+
+    # '05:00 AM'
+    (flag, value) = checkDate(classDate)
+    if flag == True:
+        if given_time[6:8] == 'AM' and current_time[6:8] == 'PM':
+            t = '* Reservation for past classes cannot be made.'
+        else: # same part of day
+            if int(given_time[0:2]) < int(current_time[0:2]): # compare Hour
+                t = '* Reservation for past classes cannot be made.'
+            elif int(given_time[0:2]) > int(current_time[0:2]):
+                t = ''
+            else:
+                if int(given_time[3:5]) < int(current_time[3:5]): # compare Minute
+                    t = '* Reservation for past classes cannot be made.'
+                elif int(given_time[3:5]) > int(current_time[3:5]):
+                    t = ''
+                else:
+                    t = ''
+    else:
+        t = f'{value}'
+ 
+    return(flag, t)
