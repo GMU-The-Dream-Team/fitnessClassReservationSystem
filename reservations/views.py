@@ -246,9 +246,15 @@ def checkClassPassed(fitnessClass, classDate):
     now = datetime.now()
     current_time = now.strftime('%I:%M %p')
     t = ''
-
-    (flag, value) = checkDate(classDate)
-    if flag == True:
+    
+    temp_classDate = str(classDate)
+    classDate = temp_classDate[0:10]
+    todayDate = date.today().strftime('%Y-%m-%d')
+    flag = True
+    if classDate < todayDate:
+        flag = False
+        t =  'The class date is in past'
+    elif todayDate == classDate:
         if given_time[6:8] == 'AM' and current_time[6:8] == 'PM':
             t = '* Reservation for past class cannot be made.'
             flag = False
@@ -267,6 +273,7 @@ def checkClassPassed(fitnessClass, classDate):
                 else:
                     flag = False
     else:
-        t = f'{value}'
- 
+        t=''
+        flag = True
+
     return(flag, t)

@@ -21,6 +21,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto" id="navButtons">
           {% if user.is_authenticated %}
+            <li>
+              <form action="{% url 'fitnessClass:schedule' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Fitness Class Schedule</button>
+              </form> 
+            </li>          
             {% if user.is_staff %}
               <li>
                 <form action="{% url 'reservations:staffReservations' %}">
@@ -35,13 +41,13 @@
                   <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">My Reservations</button>
                 </form> 
               </li>              
-            {% endif %}
-              <li>
-                <form action="{% url 'accounts:logout' %}">
-                  {% csrf_token %}
-                  <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Log Out</button>
-                </form> 
-              </li>             
+            {% endif %} 
+            <li>
+              <form action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Log Out</button>
+              </form> 
+            </li>             
           {% endif %}          
         </ul>
         </div>
