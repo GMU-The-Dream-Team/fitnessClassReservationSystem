@@ -11,7 +11,8 @@
 
     <div class="reserve">
         <div class="flex-child">
-            <form id="reserve-form" action="{% url 'reservations:submission' %}" method="post">
+            
+                <form id="reserve-form" action="{% url 'reservations:submission' %}" method="post">
                 {% csrf_token %}
 
                 <h3>{{className}}</h3>
@@ -19,6 +20,18 @@
                 <h6>{{startTime}} - {{endTime}}</h6>
                 <h6>Todays Date = {{today}}</h6>
 
+                {{customerForm.as_p}}
+                {% if currentUser.is_staff %}
+                    <p>
+                        <label>Patronship: </label>
+                            <select name="patronship" id="patronship">
+                                <option selected disabled>- Choose One -</option>
+                                <option value="Annual">Annual Pass Holder</option>
+                                <option value="Town">Town Resident</option>
+                                <option value="None">Neither</option>
+                            </select>
+                    </p>
+                {% endif %}
                 <input name="className" type="hidden" value="{{className}}"></input>
                 <input name="startTime" type="hidden" value="{{startTime}}"></input>
                 <input name="endTime" type="hidden" value="{{endTime}}"></input>
@@ -33,8 +46,13 @@
                 </form>
                 <p id="duplicate-message">{{classPassedMessage}}</p>
                 <p>
-                    <form action="{% url 'reservations:myReservations' %}">
-                        <input type="submit" value="View Reservations"/>
+                    {% if currentUser.is_staff %}
+                        <form action="{% url 'reservations:staffReservations' %}">
+                            <input type="submit" value="View Patron Reservations"/>
+                    {% else %}
+                        <form action="{% url 'reservations:myReservations' %}">
+                            <input type="submit" value="View Reservations"/>
+                    {% endif %}
                     </form>
                 </p>
             {% else %}
@@ -45,8 +63,13 @@
                     </form>
                     <p id="duplicate-message">{{duplicateMessage}}</p>
                     <p>
-                        <form action="{% url 'reservations:myReservations' %}">
-                            <input type="submit" value="View Reservations"/>
+                        {% if currentUser.is_staff %}
+                            <form action="{% url 'reservations:staffReservations' %}">
+                                <input type="submit" value="View Patron Reservations"/>
+                        {% else %}
+                            <form action="{% url 'reservations:myReservations' %}">
+                                <input type="submit" value="View Reservations"/>
+                        {% endif %}
                         </form>
                     </p>
                 {% endif %}            

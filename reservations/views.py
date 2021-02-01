@@ -1,18 +1,33 @@
 from datetime import date
 from django.utils import timezone
-from django.db.models.fields import DateField
 from django.shortcuts import render, redirect
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 from . models import Reservation, WaitList
 from fitnessClass.models import FitnessClass
 from accounts.models import Customer
+from accounts.forms import staffCustomerForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 
 
 # Create your views here.
 @login_required(login_url="accounts:login")
 def reserve_view(request):
+    customerForm = None
+    firstName = None
+    lastName = None
+    phoneNumber = None
+    duplicate = False
+    duplicateMessage = ''
+    currentUser = request.user
     if request.method == 'POST':
+        if currentUser.is_staff:
+            customerForm = staffCustomerForm()
+            if customerForm.is_valid():
+                firstName = customerForm.cleaned_data.get('firstName')
+                lastName = customerForm.cleaned_data.get('lastName')
+                phoneNumber = customerForm.cleaned_data.get('phoneNumber')
         statement = ''
         className = request.POST.get('className')
         instructorName = request.POST.get('instructorName')
@@ -29,7 +44,8 @@ def reserve_view(request):
             available = temp_available
             availabilityTitle = 'Position on WaitList'
             available = (int(available) + 1)
-        (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
+        if currentUser.is_staff == False:
+            (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
         (classPassedFlag, classPassedMessage) = checkClassPassed(getFitnessClass(classId), dateFormated)
         rv = {
             'statement': statement,
@@ -45,7 +61,9 @@ def reserve_view(request):
             'duplicate':duplicate,
             'duplicateMessage':duplicateMessage,
             'classPassedFlag': classPassedFlag,
-            'classPassedMessage': classPassedMessage
+            'classPassedMessage': classPassedMessage,
+            'customerForm': customerForm,
+            'currentUser': currentUser
         }
         return render(request, 'reservations/reserve.html', rv)
     else:
@@ -53,6 +71,7 @@ def reserve_view(request):
 
 @login_required(login_url="accounts:login")
 def submission_view(request):
+    currentUser = request.user
     classId = request.POST.get('classId')
     classDate = request.POST.get('classDate')
     dateFormated = formatDate(classDate)
@@ -67,56 +86,81 @@ def submission_view(request):
    
     reservationInstance = Reservation()
     reservationInstance.classReserved = fitnessClass
-    reservationInstance.customerReserving = getCustomer(request)
-    reservationInstance.classDate = dateFormated
-    reservationInstance.reservationDate = datetime.now().today()
-    reservationInstance.reservationTime = datetime.now().time()
 
-    statement.append(f'Reservation made for \n{classDate}')
-    statement.append(f'\n {reservationInstance.classReserved}')    
-    statement.append(f'by {(reservationInstance.customerReserving)}')
-
-    temp_waitList = WaitList()
-    temp_waitList.save()
-    nId = temp_waitList.id
-    
-    if int(max) > 9:
-        if int(available) > 10:
-            reservationInstance.reservationStatus = 'Reserved'
-        elif int(available) <= 10 and int(available) > 0:
-            reservationInstance.reservationStatus = 'OverDraft'
+    duplicateFlag = False
+    if currentUser.is_staff:
+        firstName = 'Azaz'
+        lastName = 'shah'
+        phoneNumber = '123-703-1234'
+        customerList = Customer.objects.values_list('id', flat=True).filter(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
+        (flag, value) = checkDuplicateReservationStaff(firstName, lastName, phoneNumber, classId, dateFormated)
+        if flag == True:
+            statement.append(f'{value}')
+            duplicateFlag = True
         else:
-            reservationInstance.reservationStatus = 'WaitList'
-            reservationInstance.waitNumber = nId
+            if len(customerList) <= 0:
+                # create a new customer and assign all values, including adding a user account
+                customer = Customer()
+                customer.email = 'temporaryEmail@email.com'
+                customer.firstName = firstName
+                customer.lastName = lastName
+                customer.phoneNumber = phoneNumber
+                customer.save()
+            else:
+                list = Customer.objects.all().filter(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
+                for i in list:
+                    reservationInstance.customerReserving = i
     else:
-        if int(available) > 0:
-            reservationInstance.reservationStatus = 'Reserved'
+        reservationInstance.customerReserving = getCustomer(request)
+    if duplicateFlag == False:
+        reservationInstance.classDate = dateFormated
+        reservationInstance.reservationDate = datetime.now().today()
+        reservationInstance.reservationTime = datetime.now().time()
+
+        statement.append(f'Reservation made for \n{classDate}')
+        statement.append(f'\n {reservationInstance.classReserved}')
+        statement.append(f'by {(reservationInstance.customerReserving)}')
+
+        temp_waitList = WaitList()
+        temp_waitList.save()
+        nId = temp_waitList.id
+        
+        if int(max) > 9:
+            if int(available) > 10:
+                reservationInstance.reservationStatus = 'Reserved'
+            elif int(available) <= 10 and int(available) > 0:
+                reservationInstance.reservationStatus = 'OverDraft'
+            else:
+                reservationInstance.reservationStatus = 'WaitList'
+                reservationInstance.waitNumber = nId
         else:
-            reservationInstance.reservationStatus = 'WaitList'
-            reservationInstance.waitNumber = nId
-    reservationInstance.save()    
+            if int(available) > 0:
+                reservationInstance.reservationStatus = 'Reserved'
+            else:
+                reservationInstance.reservationStatus = 'WaitList'
+                reservationInstance.waitNumber = nId
+        reservationInstance.save()
 
-    waitList = getWaitListPosition(dateFormated, nId)
-    if waitList > 0:
-        statement.append(f'Wait List Position: {waitList + 1}')
-
-    return render(request, 'reservations/submission.html', {'statement':statement})    
+        waitList = getWaitListPosition(dateFormated, nId)
+        if waitList > 0:
+            statement.append(f'Wait List Position: {waitList + 1}')
+        return render(request, 'reservations/submission.html', {'statement':statement})
+    else:
+        return render(request, 'reservations/submission.html', {'statement': statement, 'duplicateFlag':duplicateFlag})
 
 @login_required(login_url="accounts:login")
 def myReservations_view(request):
     returnValue = []  
     if request.method == 'POST':
         reservationId = request.POST.get('reservationId')
-        intId = Reservation.objects.all().filter(id = reservationId)
-        temp_id = None
-        for i in intId:
-            temp_id = i.id
+        intId = Reservation.objects.values_list('id', flat=True).filter(id = reservationId)
+        temp_id = intId[0]
         Reservation.objects.filter(id = temp_id).delete()
     currentUser = request.user
     customer = Customer.objects.all().filter(user = currentUser)
     customerId = ''
     for i in customer:
-        customerId = i.id
+        customerId = i
     todaysDate = date.today()
     select = Reservation.objects.all().filter(customerReserving = customerId).order_by('-classDate')
     for i in select:
@@ -233,8 +277,21 @@ def cancelFunction(dateOfClass, currentWaitNumber):
                 id = line.id
     return id
 
+#checks for duplicate reservations when a customer is reserving
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
+    if count > 0 :
+        return (True, f'* You have already reserved for this class')
+    else:
+        return (False, '')
+
+def checkDuplicateReservationStaff(firstName, lastName, phoneNumber, classId, dateOfClass):
+    reservations = Reservation.objects.filter(classReserved = classId, classDate = dateOfClass)
+    count = 0
+    for r in reservations:
+        if r.customerReserving.firstName == firstName and r.customerReserving.lastName == lastName and r.customerReserving.phoneNumber == phoneNumber:
+            count += 1
+    
     if count > 0 :
         return (True, f'* You have already reserved for this class')
     else:

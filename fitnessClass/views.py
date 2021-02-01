@@ -1,6 +1,6 @@
 import datetime
 from accounts.models import Customer
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from . models import FitnessClass
 from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
@@ -9,6 +9,7 @@ from datetime import date, timedelta
 @login_required(login_url="accounts:login")
 def schedule_view(request):
 
+    currentUser = request.user
     sundayList = FitnessClass.objects.all().filter(dayOfWeek = 'Sunday').order_by('startTime')
     mondayList = FitnessClass.objects.all().filter(dayOfWeek = 'Monday').order_by('startTime')
     tuesdayList = FitnessClass.objects.all().filter(dayOfWeek = 'Tuesday').order_by('startTime')
@@ -82,7 +83,8 @@ def schedule_view(request):
         'datesList':datesList,
         'dayOrder':dayOrder,
         'availableDays':availableDays,
-        'statement': statement
+        'statement': statement,
+        'currentUser': currentUser
     }
     return render(request, 'fitnessClass/schedule.html', rv)
 

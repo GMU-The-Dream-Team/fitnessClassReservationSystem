@@ -2,15 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Customer(models.Model):
-    email = models.EmailField(max_length=50)
-    firstName = models.CharField(max_length=20)
-    lastName = models.CharField(max_length=20)
-    street = models.CharField(max_length=20)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=20)
-    zipcode = models.CharField(max_length=20)
-    phoneNumber = models.CharField(max_length=20)
-    user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=50, null=True)
+    firstName = models.CharField(max_length=20, null=True)
+    lastName = models.CharField(max_length=20, null=True)
+    street = models.CharField(max_length=20, null=True)
+    city = models.CharField(max_length=100, null=True)
+    state = models.CharField(max_length=20, null=True)
+    zipcode = models.CharField(max_length=20, null=True)
+    phoneNumber = models.CharField(max_length=20, null=True)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     verificationChoices = [
         ('Annual', 'Annual Pass Holder'),
         ('Resident', 'Town of Leesburg Resident'),

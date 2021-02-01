@@ -3,12 +3,12 @@ from fitnessClass.models import FitnessClass
 from accounts.models import Customer
 
 class WaitList(models.Model):
-    wait = models.CharField(max_length=1, null=True)
+    wait = models.CharField(max_length=20, null=True)
 
 # Create your models here.
 class Reservation(models.Model):
     classReserved = models.ForeignKey(FitnessClass, default=None, on_delete=models.CASCADE)
-    customerReserving = models.ForeignKey(Customer, default=None, on_delete=models.CASCADE)
+    customerReserving = models.ForeignKey(Customer, null=True, on_delete=models.DO_NOTHING)
     classDate = models.DateField(default=None)
     reservationStatus = models.CharField(max_length=20, default=None)
     reservationDate = models.DateField(default=None)

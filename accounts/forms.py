@@ -16,3 +16,13 @@ class CustomerForm(forms.ModelForm):
             'zipcode': _('Zipcode'),
             'phoneNumber': _('Phone Number')
         }
+
+class staffCustomerForm(forms.ModelForm):
+    class Meta:
+        model = models.Customer
+        fields = [ 'firstName', 'lastName', 'phoneNumber']
+        labels = {
+            'firstName' : _('First Name'),
+            'lastName': _('Last Name'),
+            'phoneNumber': _('Phone Number')
+        }

@@ -27,7 +27,7 @@
                 <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Fitness Class Schedule</button>
               </form> 
             </li>          
-            {% if user.is_staff %}
+            {% if user.is_staff %}                    
               <li>
                 <form action="{% url 'reservations:staffReservations' %}">
                   {% csrf_token %}

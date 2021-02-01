@@ -21,7 +21,7 @@
                     {% if i == 6 %}
                         {% for class in sundayList %}
                         <tr>
-                            <form action="{% url 'reservations:reserve' %}" method="post">
+                                <form action="{% url 'reservations:reserve' %}" method="post">
                                 {% csrf_token %}
                                     <td>{{class.dayOfWeek}}</td>
                                     <td>{{class.className}}</td>
@@ -52,7 +52,8 @@
                     {% elif i == 5 %}
                         {% for class in saturdayList %}
                             <tr>
-                                <form action="{% url 'reservations:reserve' %}" method="post">
+                                
+                                    <form action="{% url 'reservations:reserve' %}" method="post">
                                     {% csrf_token %}
                                         <td>{{class.dayOfWeek}}</td>
                                         <td>{{class.className}}</td>
@@ -83,7 +84,8 @@
                     {% elif i == 4 %}
                         {% for class in fridayList %}
                             <tr>
-                                <form action="{% url 'reservations:reserve' %}" method="post">
+                                
+                                    <form action="{% url 'reservations:reserve' %}" method="post">
                                     {% csrf_token %}
                                         <td>{{class.dayOfWeek}}</td>
                                         <td>{{class.className}}</td>
@@ -114,7 +116,8 @@
                         {% elif i == 3 %}
                         {% for class in thursdayList %}
                             <tr>
-                                <form action="{% url 'reservations:reserve' %}" method="post">
+                                
+                                    <form action="{% url 'reservations:reserve' %}" method="post">
                                     {% csrf_token %}
                                             <td>{{class.dayOfWeek}}</td>
                                             <td>{{class.className}}</td>
@@ -145,7 +148,8 @@
                     {% elif i == 2 %}
                         {% for class in wednesdayList %}
                             <tr>
-                                <form action="{% url 'reservations:reserve' %}" method="post">
+                                
+                                    <form action="{% url 'reservations:reserve' %}" method="post">
                                     {% csrf_token %}
                                             <td>{{class.dayOfWeek}}</td>
                                             <td>{{class.className}}</td>
@@ -177,7 +181,8 @@
                     {% elif i == 1 %}
                         {% for class in tuesdayList %}
                             <tr>
-                                <form action="{% url 'reservations:reserve' %}" method="post">
+                                
+                                    <form action="{% url 'reservations:reserve' %}" method="post">
                                     {% csrf_token %}
                                             <td>{{class.dayOfWeek}}</td>
                                             <td>{{class.className}}</td>
@@ -208,7 +213,7 @@
                     {% else %}
                         {% for class in mondayList %}
                             <tr>
-                                <form action="{% url 'reservations:reserve' %}" method="post">
+                                    <form action="{% url 'reservations:reserve' %}" method="post">
                                     {% csrf_token %}
                                             <td>{{class.dayOfWeek}}</td>                                
                                             <td>{{class.className}}</td>
