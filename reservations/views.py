@@ -36,7 +36,6 @@ def reserve_view(request):
         classDate = request.POST.get('date')
         classId = request.POST.get('classId')
         today = (date.today().strftime('%m-%d-%Y'))
-        availabilityTitle = 'Available Space'
         dateFormated = formatDate(classDate)        
         (available, max) = availability(classId, dateFormated)
         if available < 1:
@@ -44,6 +43,10 @@ def reserve_view(request):
             available = temp_available
             availabilityTitle = 'Position on WaitList'
             available = (int(available) + 1)
+        elif available >= 10:
+            availabilityTitle = 'OverDraft Room Availability'
+        else:
+            availabilityTitle = 'Availability'
         if currentUser.is_staff == False:
             (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
         (classPassedFlag, classPassedMessage) = checkClassPassed(getFitnessClass(classId), dateFormated)
@@ -174,7 +177,7 @@ def staffReservations_view(request):
     rv = {}
     if request.method == 'GET':
         rv['flag'] = True
-        select = FitnessClass.objects.all().order_by("dayOfWeek")
+        select = FitnessClass.objects.all().order_by("-dayOfWeek")
         classList = {}
         counter = 0
         for i in select:
@@ -183,6 +186,28 @@ def staffReservations_view(request):
         rv['classList'] = classList
         return render(request, 'reservations/staffReservations.html', rv)
     else:
+        action = request.POST.get('action')
+        if action == 'cancel':
+            temp_id = request.POST.get('reservationId')
+            Reservation.objects.filter(id = temp_id).delete()
+        elif action == 'overDraftToReserved':
+            temp_id = request.POST.get('reservationId')
+            r = Reservation.objects.get(id = temp_id)
+            r.reservationStatus = 'Reserved'
+            r.save()
+        elif action == 'waitListToOverDraft':
+            temp_id = request.POST.get('reservationId')
+            r = Reservation.objects.get(id = temp_id)
+            r.reservationStatus = 'OverDraft'
+            r.save()
+        elif action == 'waitListToReserved':
+            temp_id = request.POST.get('reservationId')
+            r = Reservation.objects.get(id = temp_id)
+            r.reservationStatus = 'Reserved'
+            r.save()
+        else:
+            ''
+
         classId = request.POST.get('classId')
         select = Reservation.objects.all().filter(classReserved = getFitnessClass(classId)).order_by('reservationTime')
         reservedList = {}
@@ -194,8 +219,10 @@ def staffReservations_view(request):
         overDraftCounter = 0
         waitListCounter = 0
         className = ''
+        classMaximum = 0
         for i in select:
             className = i.classReserved.className
+            classMaximum = i.classReserved.maximumCapacity
             (flag, value) = checkDate(i.classDate)
             if flag == True:
                 counter = i.id
@@ -215,12 +242,15 @@ def staffReservations_view(request):
                 rv['statement'] = value
                 rv['flag'] = False
                 return render(request, 'reservations/staffReservations.html', rv)
+        reservedAndOverDraftTotal = reservedCounter + overDraftCounter
         rv['reservedCounter'] = reservedCounter
         rv['waitListCounter'] = waitListCounter
         rv['overDraftCounter'] = overDraftCounter
         rv['flag'] = False
         rv['className'] = className
-        rv['reservedAndOverDraftTotal'] = reservedCounter + overDraftCounter
+        rv['classMaximum'] = int(classMaximum)
+        rv['overDraftMaximum'] = 10
+        rv['reservedAndOverDraftTotal'] = reservedAndOverDraftTotal
         return render(request, 'reservations/staffReservations.html', rv)
 
 def availability(classId, date):
