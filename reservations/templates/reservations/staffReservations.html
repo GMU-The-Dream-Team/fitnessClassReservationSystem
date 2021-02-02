@@ -36,9 +36,13 @@
                     </table>
                 </div>    
             {% else %}
-
                 <div class="reservations-table">
                     <table class="table table-bordered">
+                        <tr>
+                            <th colspan="100%">
+                                {{className}}
+                            </th>
+                        </tr>
                         <tr>
                             <th colspan="100%">Reserved List</th>
                         </tr>
@@ -47,6 +51,7 @@
                             <th>Last Name</th>
                             <th>Phone Number</th>
                             <th>Date Reserved</th>
+                            <th></th>
                         </tr>
                         {% if reservedCounter > 0 %}
                             {% for k, v in reservedList.items %}
@@ -62,6 +67,11 @@
                                     </td>
                                     <td>
                                         {{v.reservationDate}}
+                                    </td>
+                                    <td>
+                                        <form>
+                                            <input type="submit" value="Cancel"/>
+                                        </form>
                                     </td>                                    
                                 </tr>
                             {% endfor %}
@@ -84,6 +94,7 @@
                                 <th>Last Name</th>
                                 <th>Phone Number</th>
                                 <th>Date Reserved</th>
+                                <th></th>
                             </tr>
                             {% if overDraftCounter > 0 %}
                                 {% for k, v in overDraftList.items %}
@@ -99,7 +110,17 @@
                                         </td>
                                         <td>
                                             {{v.reservationDate}}
-                                        </td>                                    
+                                        </td>
+                                        <td>
+                                            {% if reservedAndOverDraftTotal %}
+                                                <form>
+                                                    <input type="submit" value="Reserve in main room"/>
+                                                </form>
+                                            {% endif %}
+                                            <form>
+                                                <input type="submit" value="Cancel"/>
+                                            </form>
+                                        </td>                                       
                                     </tr>
                                 {% endfor %}
                             {% else %}
@@ -121,6 +142,7 @@
                             <th>Last Name</th>
                             <th>Phone Number</th>
                             <th>Date Reserved</th>
+                            <th></th>
                         </tr>
                         {% if waitListCounter > 0 %}
                             {% for k, v in waitList.items %}
@@ -136,7 +158,25 @@
                                     </td>
                                     <td>
                                         {{v.reservationDate}}
-                                    </td>                                    
+                                    </td>
+                                    <td>
+                                        {% if overDraftCounter > 0 %}
+                                            {% if forloop.first %}
+                                                <form>
+                                                    <input type="submit" value="Move To Over Draft Room"></input>
+                                                </form>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if forloop.first %}
+                                                <form>
+                                                    <input type="submit" value="Reserve"></input>
+                                                </form>                                            
+                                            {% endif %}
+                                        {% endif %}
+                                        <form>
+                                            <input type="submit" value="Cancel"></input>
+                                        </form>
+                                    </td>                                       
                                 </tr>
                             {% endfor %}
                         {% else %}

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, time
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from datetime import datetime, date
@@ -116,7 +116,7 @@ def submission_view(request):
 
     if duplicateFlag == False:
         reservationInstance.classDate = dateFormated
-        reservationInstance.reservationDate = datetime.now().today()
+        reservationInstance.reservationDate = date.today()
         reservationInstance.reservationTime = datetime.now().time()
 
         statement.append(f'Reservation made for \n{classDate}')
@@ -143,7 +143,7 @@ def submission_view(request):
                 reservationInstance.waitNumber = nId
         reservationInstance.save()
 
-        waitList = getWaitListPosition(dateFormated, nId)
+        waitList = getWaitListPosition(dateFormated, reservationInstance)
         if waitList > 0:
             statement.append(f'Wait List Position: {waitList + 1}')
         return render(request, 'reservations/submission.html', {'statement':statement, 'currentUser':currentUser})
@@ -193,7 +193,9 @@ def staffReservations_view(request):
         reservedCounter = 0
         overDraftCounter = 0
         waitListCounter = 0
+        className = ''
         for i in select:
+            className = i.classReserved.className
             (flag, value) = checkDate(i.classDate)
             if flag == True:
                 counter = i.id
@@ -217,6 +219,8 @@ def staffReservations_view(request):
         rv['waitListCounter'] = waitListCounter
         rv['overDraftCounter'] = overDraftCounter
         rv['flag'] = False
+        rv['className'] = className
+        rv['reservedAndOverDraftTotal'] = reservedCounter + overDraftCounter
         return render(request, 'reservations/staffReservations.html', rv)
 
 def availability(classId, date):
@@ -254,12 +258,12 @@ def getFitnessClass(classId):
         fitnessClass = i
     return fitnessClass
 
-def getWaitListPosition(dateOfClass, currentWaitNumber):
-    list = Reservation.objects.filter(classDate = dateOfClass)
+def getWaitListPosition(dateOfClass, currentReservation):
+    list = Reservation.objects.filter(classReserved = currentReservation.classReserved, classDate = dateOfClass, reservationStatus = "WaitList")
     count = 0
     for line in list:
         waitNumber = line.waitNumber
-        if waitNumber > 0 and waitNumber < currentWaitNumber:
+        if waitNumber > 0 and waitNumber < currentReservation.waitNumber:
             count += 1
     return count
 
