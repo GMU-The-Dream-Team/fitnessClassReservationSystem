@@ -143,6 +143,20 @@ font-weight: bold;
 #duplicate-message{
 	color: red;
 }
+
+/* staffReservation.html css*/
+
+
+.table-holder{
+	text-align:center;
+}
+.table-holder th{
+	background-color: #005C9A;
+	color: white
+
+}
+
+
 /* Wajaat End */
 
 

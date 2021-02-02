@@ -20,8 +20,16 @@
                 <h6>{{startTime}} - {{endTime}}</h6>
                 <h6>Todays Date = {{today}}</h6>
 
-                {{customerForm.as_p}}
                 {% if currentUser.is_staff %}
+                    <p><label>First Name: </label>
+
+                        <input type="text" name="firstName"/>
+
+                    <label>Last Name: </label>                    
+                        <input type="text" name="lastName"/>
+                    
+                    <label>Phone Number: </label>                    
+                        <input type="text" name="phoneNumber"/>                   
                     <p>
                         <label>Patronship: </label>
                             <select name="patronship" id="patronship">

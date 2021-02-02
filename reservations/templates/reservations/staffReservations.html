@@ -2,86 +2,153 @@
 
 {% block content%}
 
-    {% if flag == True %}
-        <table>
-            <th>Classes Offered</th>
-            <tr>
-                {% for k,v in classList.items %}
-                <td>
-                    <form class="staff-class-selection" action="{% url 'reservations:staffReservations' %}" method="post">
-                    {% csrf_token %}
-                        <p>{{v.className}}</p>
-                        <p>{{v.dayOfWeek}}</p>
-                        <p>{{v.startTime}}</p>
-                        <input name="classId" type="hidden" value="{{k}}"></input>
-                        <button type="submit">View Reservations</button>             
-                    </form>
-                </td>
-                {% endfor %}
-            </tr>
-        </table>
-        {{statement}}
-    {% else %}
-        {% if reservedCounter > 0%}
-            <table>
-                <h2>Reserved List</h2>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone Number</th>
-                <th>Date Reserved</th>
-                {% if reservedCounter > 0 %}
-                    {% for k, v in reservedList.items %}
+    <div class="table-holder">
+            {% if flag == True %}
+                <div class="classes-table">
+                    <table class="table table-bordered">
                         <tr>
-                            <td>
-                                {{v.customerReserving.firstName}}
-                            </td>
-                            <td>
-                                {{v.customerReserving.lastName}}
-                            </td>
-                            <td>
-                                {{v.customerReserving.phoneNumber}}
-                            </td>
-                            <td>
-                                {{v.reservationDate}}
-                            </td>                                    
+                            <th colspan="100%">Classes Offered</th>
                         </tr>
-                    {% endfor %}
-                {% else %}
-                    <p> No reservations made for this class</p>
+                        <tr>
+                            <th>Day</th>
+                            <th>Class Name</th>
+                            <th>Instructor</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th></th>
+                        </tr>
+                        {% for k,v in classList.items %}
+                            <tr>
+                                <td>{{v.dayOfWeek}}</td>
+                                <td>{{v.className}}</td>
+                                <td>{{v.instructorName}}</td>
+                                <td>{{v.startTime}}</td>
+                                <td>{{v.endTime}}</td>
+                                <td>
+                                    <form class="staff-class-selection" action="{% url 'reservations:staffReservations' %}" method="post">
+                                    {% csrf_token %}
+                                        <input name="classId" type="hidden" value="{{k}}"></input>
+                                        <input type="submit" value="View Reservation"/>  
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>    
+            {% else %}
+
+                <div class="reservations-table">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th colspan="100%">Reserved List</th>
+                        </tr>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Phone Number</th>
+                            <th>Date Reserved</th>
+                        </tr>
+                        {% if reservedCounter > 0 %}
+                            {% for k, v in reservedList.items %}
+                                <tr>
+                                    <td>
+                                        {{v.customerReserving.firstName}}
+                                    </td>
+                                    <td>
+                                        {{v.customerReserving.lastName}}
+                                    </td>
+                                    <td>
+                                        {{v.customerReserving.phoneNumber}}
+                                    </td>
+                                    <td>
+                                        {{v.reservationDate}}
+                                    </td>                                    
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td>No Reservations</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+
+                {% if overDraftCounter > 0 %}
+                    <div class="reservations-table">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th colspan="100%">Overdraft List</th>
+                            </tr>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Phone Number</th>
+                                <th>Date Reserved</th>
+                            </tr>
+                            {% if overDraftCounter > 0 %}
+                                {% for k, v in overDraftList.items %}
+                                    <tr>
+                                        <td>
+                                            {{v.customerReserving.firstName}}
+                                        </td>
+                                        <td>
+                                            {{v.customerReserving.lastName}}
+                                        </td>
+                                        <td>
+                                            {{v.customerReserving.phoneNumber}}
+                                        </td>
+                                        <td>
+                                            {{v.reservationDate}}
+                                        </td>                                    
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="100%">No Over Draft Reservations</td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
                 {% endif %}
-            </table>
-        {% endif %}
 
-        {% if overDraftCounter > 0 %}
-        <table>
-            <h2>Overdraft List</h2>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone Number</th>
-            <th>Date Reserved</th>
-            {% for k, v in overDraftList.items %}
-                <tr>
-                    <td>
-                        {{v}}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        {% endif %}
-
-        {% if waitListCounter > 0 %}
-            <table>
-                <th>Wait List</th>
-                    {% for k, v in waitList.items %}
+                <div class="reservations-table">
+                    <table class="table table-bordered">
                         <tr>
-                            <td>
-                                {{v}}
-                            </td>
+                            <th colspan="100%">Wait List</th>
                         </tr>
-                    {% endfor %}
-            </table>  
-        {% endif %}
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Phone Number</th>
+                            <th>Date Reserved</th>
+                        </tr>
+                        {% if waitListCounter > 0 %}
+                            {% for k, v in waitList.items %}
+                                <tr>
+                                    <td>
+                                        {{v.customerReserving.firstName}}
+                                    </td>
+                                    <td>
+                                        {{v.customerReserving.lastName}}
+                                    </td>
+                                    <td>
+                                        {{v.customerReserving.phoneNumber}}
+                                    </td>
+                                    <td>
+                                        {{v.reservationDate}}
+                                    </td>                                    
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="100%">No Waitlisted Reservations</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            {% endif %}
+    </div>
 
-    {% endif %}
+
 {% endblock %}
 

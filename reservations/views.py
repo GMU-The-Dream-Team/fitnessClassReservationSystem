@@ -89,9 +89,9 @@ def submission_view(request):
 
     duplicateFlag = False
     if currentUser.is_staff:
-        firstName = 'Azaz'
-        lastName = 'shah'
-        phoneNumber = '123-703-1234'
+        firstName = request.POST.get('firstName')
+        lastName = request.POST.get('lastName')
+        phoneNumber = request.POST.get('phoneNumber')
         customerList = Customer.objects.values_list('id', flat=True).filter(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
         (flag, value) = checkDuplicateReservationStaff(firstName, lastName, phoneNumber, classId, dateFormated)
         if flag == True:
@@ -106,12 +106,14 @@ def submission_view(request):
                 customer.lastName = lastName
                 customer.phoneNumber = phoneNumber
                 customer.save()
+                reservationInstance.customerReserving = customer
             else:
                 list = Customer.objects.all().filter(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
                 for i in list:
                     reservationInstance.customerReserving = i
     else:
         reservationInstance.customerReserving = getCustomer(request)
+
     if duplicateFlag == False:
         reservationInstance.classDate = dateFormated
         reservationInstance.reservationDate = datetime.now().today()
@@ -144,9 +146,9 @@ def submission_view(request):
         waitList = getWaitListPosition(dateFormated, nId)
         if waitList > 0:
             statement.append(f'Wait List Position: {waitList + 1}')
-        return render(request, 'reservations/submission.html', {'statement':statement})
+        return render(request, 'reservations/submission.html', {'statement':statement, 'currentUser':currentUser})
     else:
-        return render(request, 'reservations/submission.html', {'statement': statement, 'duplicateFlag':duplicateFlag})
+        return render(request, 'reservations/submission.html', {'statement': statement, 'duplicateFlag':duplicateFlag, 'currentUser':currentUser})
 
 @login_required(login_url="accounts:login")
 def myReservations_view(request):
@@ -171,9 +173,8 @@ def myReservations_view(request):
 def staffReservations_view(request):
     rv = {}
     if request.method == 'GET':
-        rv['statement'] = 'This is a get request'
         rv['flag'] = True
-        select = FitnessClass.objects.all()
+        select = FitnessClass.objects.all().order_by("dayOfWeek")
         classList = {}
         counter = 0
         for i in select:
@@ -183,7 +184,7 @@ def staffReservations_view(request):
         return render(request, 'reservations/staffReservations.html', rv)
     else:
         classId = request.POST.get('classId')
-        select = Reservation.objects.all().filter(classReserved = getFitnessClass(classId))
+        select = Reservation.objects.all().filter(classReserved = getFitnessClass(classId)).order_by('reservationTime')
         reservedList = {}
         waitList = {}
         overDraftList = {}
@@ -215,9 +216,6 @@ def staffReservations_view(request):
         rv['reservedCounter'] = reservedCounter
         rv['waitListCounter'] = waitListCounter
         rv['overDraftCounter'] = overDraftCounter
-
-
-        rv['statement'] = 'This is a post request'
         rv['flag'] = False
         return render(request, 'reservations/staffReservations.html', rv)
 
@@ -289,7 +287,7 @@ def checkDuplicateReservationStaff(firstName, lastName, phoneNumber, classId, da
     reservations = Reservation.objects.filter(classReserved = classId, classDate = dateOfClass)
     count = 0
     for r in reservations:
-        if r.customerReserving.firstName == firstName and r.customerReserving.lastName == lastName and r.customerReserving.phoneNumber == phoneNumber:
+        if r.customerReserving.firstName.lower() == firstName.lower() and r.customerReserving.lastName.lower() == lastName.lower() and r.customerReserving.phoneNumber.lower() == phoneNumber.lower():
             count += 1
     
     if count > 0 :

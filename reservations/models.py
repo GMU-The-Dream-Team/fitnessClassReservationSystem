@@ -8,7 +8,7 @@ class WaitList(models.Model):
 # Create your models here.
 class Reservation(models.Model):
     classReserved = models.ForeignKey(FitnessClass, default=None, on_delete=models.CASCADE)
-    customerReserving = models.ForeignKey(Customer, null=True, on_delete=models.DO_NOTHING)
+    customerReserving = models.ForeignKey(Customer, null=True, on_delete=models.CASCADE)
     classDate = models.DateField(default=None)
     reservationStatus = models.CharField(max_length=20, default=None)
     reservationDate = models.DateField(default=None)
