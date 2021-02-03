@@ -74,13 +74,14 @@ def reserve_view(request):
 
 @login_required(login_url="accounts:login")
 def submission_view(request):
+    submitted = request.POST.get('submitted')
     currentUser = request.user
     classId = request.POST.get('classId')
     classDate = request.POST.get('classDate')
     dateFormated = formatDate(classDate)
     (available, max) = availability(classId, dateFormated)
-    statement = []
-    
+    statement = {}
+    statement['currentUser'] = currentUser
     list = FitnessClass.objects.all().filter(id = classId)
 
     fitnessClass = ''
@@ -89,8 +90,8 @@ def submission_view(request):
    
     reservationInstance = Reservation()
     reservationInstance.classReserved = fitnessClass
-
     duplicateFlag = False
+    statement['duplicateFlag'] = duplicateFlag
     if currentUser.is_staff:
         firstName = request.POST.get('firstName')
         lastName = request.POST.get('lastName')
@@ -98,7 +99,7 @@ def submission_view(request):
         customerList = Customer.objects.values_list('id', flat=True).filter(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
         (flag, value) = checkDuplicateReservationStaff(firstName, lastName, phoneNumber, classId, dateFormated)
         if flag == True:
-            statement.append(f'{value}')
+            statement['duplicateReservationMessage']= (f'{value}')
             duplicateFlag = True
         else:
             if len(customerList) <= 0:
@@ -108,7 +109,8 @@ def submission_view(request):
                 customer.firstName = firstName
                 customer.lastName = lastName
                 customer.phoneNumber = phoneNumber
-                customer.save()
+                if submitted == 'True':
+                    customer.save()
                 reservationInstance.customerReserving = customer
             else:
                 list = Customer.objects.all().filter(firstName = firstName, lastName = lastName, phoneNumber = phoneNumber)
@@ -122,10 +124,10 @@ def submission_view(request):
         reservationInstance.reservationDate = date.today()
         reservationInstance.reservationTime = datetime.now().time()
 
-        statement.append(f'Reservation made for \n{classDate}')
-        statement.append(f'\n {reservationInstance.classReserved}')
-        statement.append(f'by {(reservationInstance.customerReserving)}')
-
+        statement['classDate'] = classDate
+        statement['classReserved'] = reservationInstance.classReserved
+        statement['customerReserving'] =  reservationInstance.customerReserving
+        
         temp_waitList = WaitList()
         temp_waitList.save()
         nId = temp_waitList.id
@@ -144,14 +146,19 @@ def submission_view(request):
             else:
                 reservationInstance.reservationStatus = 'WaitList'
                 reservationInstance.waitNumber = nId
-        reservationInstance.save()
-
+        
+        if submitted == 'True':
+            reservationInstance.save()
+            
+        statement['reservationStatus'] = reservationInstance.reservationStatus
         waitList = getWaitListPosition(dateFormated, reservationInstance)
+        statement['waitListPosition'] = 0
         if waitList > 0:
-            statement.append(f'Wait List Position: {waitList + 1}')
-        return render(request, 'reservations/submission.html', {'statement':statement, 'currentUser':currentUser})
+            statement['waitListPosition'] = waitList + 1
+        statement['currentUser'] = currentUser
+        return render(request, 'reservations/submission.html', statement)
     else:
-        return render(request, 'reservations/submission.html', {'statement': statement, 'duplicateFlag':duplicateFlag, 'currentUser':currentUser})
+        return render(request, 'reservations/submission.html', statement)
 
 @login_required(login_url="accounts:login")
 def myReservations_view(request):
@@ -323,7 +330,6 @@ def checkDuplicateReservationStaff(firstName, lastName, phoneNumber, classId, da
     for r in reservations:
         if r.customerReserving.firstName.lower() == firstName.lower() and r.customerReserving.lastName.lower() == lastName.lower() and r.customerReserving.phoneNumber.lower() == phoneNumber.lower():
             count += 1
-    
     if count > 0 :
         return (True, f'* You have already reserved for this class')
     else:

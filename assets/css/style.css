@@ -156,6 +156,16 @@ font-weight: bold;
 
 }
 
+/* submission.html */
+
+.submission-holder{
+	text-align:center;
+}
+
+.submission-holder th{
+    background-color:  #005C9A;
+    color: white;
+}
 
 /* Wajaat End */
 
