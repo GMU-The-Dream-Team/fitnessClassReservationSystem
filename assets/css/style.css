@@ -55,13 +55,8 @@ font-weight: bold;
 	background-color:  #005C9A;
 	text-align: center;
 }
-
-.thead th{
+th{
 	color: white;
-}
-
-.tbody{
-	text-align: center;
 }
 
 .signup-form{
@@ -106,8 +101,6 @@ font-weight: bold;
 .reserve{
 	display: flex;
 	border: 1px solid black;
-	width: 85%;
-	margin: auto;
 }
 .flex-child{
 	margin: 2% 2% 2%;
@@ -140,33 +133,6 @@ font-weight: bold;
 	color: red;
 	font-size: 30px;
 }
-#duplicate-message{
-	color: red;
-}
-
-/* staffReservation.html css*/
-
-
-.table-holder{
-	text-align:center;
-}
-.table-holder th{
-	background-color: #005C9A;
-	color: white
-
-}
-
-/* submission.html */
-
-.submission-holder{
-	text-align:center;
-}
-
-.submission-holder th{
-    background-color:  #005C9A;
-    color: white;
-}
-
 /* Wajaat End */
 
 
@@ -199,7 +165,7 @@ font-weight: bold;
 }
 
 #credits {
-	margin: 5% auto;
+	margin: 3% auto;
 	position: absolute;
 	bottom: auto;
 	width: 100%;
