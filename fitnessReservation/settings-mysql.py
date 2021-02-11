@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'accounts',
     'fitnessClass',
     'reservations',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -115,4 +116,6 @@ USE_TZ = True
 
 STATIC_URL = '/assets/'
 
-STATIC_ROOT = '/home/django/dreamteam_workspace/fitnessClassReservationSystem/assets/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+)

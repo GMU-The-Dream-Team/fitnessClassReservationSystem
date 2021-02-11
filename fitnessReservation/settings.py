@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'accounts',
     'fitnessClass',
     'reservations',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -118,5 +119,3 @@ STATIC_URL = '/assets/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
-
-STATIC_ROOT = BASE_DIR / 'assets/'
