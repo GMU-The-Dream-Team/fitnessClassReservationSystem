@@ -1,8 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 
-
-/* Wajaat Start */
 title h1{
 	font-style: italic;
 }
@@ -55,8 +53,13 @@ font-weight: bold;
 	background-color:  #005C9A;
 	text-align: center;
 }
-th{
+
+.thead th{
 	color: white;
+}
+
+.tbody{
+	text-align: center;
 }
 
 .signup-form{
@@ -95,12 +98,13 @@ th{
   margin: 3% auto auto auto;
 }
 
-
 /* Reserve.html*/
 
 .reserve{
 	display: flex;
 	border: 1px solid black;
+	width: 85%;
+	margin: auto;
 }
 .flex-child{
 	margin: 2% 2% 2%;
@@ -133,8 +137,31 @@ th{
 	color: red;
 	font-size: 30px;
 }
-/* Wajaat End */
+#duplicate-message{
+	color: red;
+}
 
+/* staffReservation.html css*/
+
+.table-holder{
+	text-align:center;
+}
+.table-holder th{
+	background-color: #005C9A;
+	color: white
+
+}
+
+/* submission.html */
+
+.submission-holder{
+	text-align:center;
+}
+
+.submission-holder th{
+    background-color:  #005C9A;
+    color: white;
+}
 
 .banner {
 	width: 100%;
@@ -164,9 +191,85 @@ th{
 	color: #fff!important;
 }
 
+.navbutton{
+	border-color: black;
+	background-color: #900028;
+	font-weight: bold;
+	color: #fff;
+	
+}
+
+.loginbtn{
+	border-color: black !important;
+	background-color: #900028 !important;
+	font-weight: bold !important;
+	color: #fff !important;
+	margin-right: 5px;
+	
+}
+
+.signupbtn{
+	border-color: black;
+	background-color: #900028 !important;
+	font-weight: bold;
+	color: #fff;
+	
+}
+
 #credits {
-	margin: 3% auto;
+	margin: 5% auto;
 	position: absolute;
 	bottom: auto;
 	width: 100%;
 }
+
+.formbox1{
+	border: 1px solid black;
+}
+
+.left-halfpage{
+	padding-left: 18%;
+	border-right: 1px solid rgb(192, 192, 192);
+}
+
+.right-halfpage{
+	padding-top: 2%;
+	padding-left: 5%;
+}
+
+.right-halfpage-field{
+	margin-bottom:10px;
+}
+
+/*Mobile Styling Start*/
+
+@media only screen and (max-width: 600px) {
+
+	/*Mobile Sign Up Page*/
+	.right-halfpage{
+	padding-left: 18%;
+  }
+
+  .left-halfpage{
+	padding-left: 18%;
+	
+	}
+
+	.centered-button{
+	padding-left:21%;
+	}
+
+	.formbox1{
+	border-bottom: 1px solid black;
+	padding-bottom: 20px;
+	}
+
+	.schedule{
+		overflow:scroll;
+	}
+
+	/*End Mobile Sign Up Page*/
+
+}
+
+/*Mobile Styling End*/
