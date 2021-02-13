@@ -271,6 +271,14 @@ font-weight: bold;
 
 	/*End Mobile Sign Up Page*/
 
+	/*Start Mobile Nav Bar*/
+
+	.logo{
+		max-width: 340px;
+	}
+
+	/*End Mobile Nav Bar*/
+
 }
 
 /*Mobile Styling End*/

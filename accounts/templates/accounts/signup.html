@@ -7,35 +7,22 @@
             <h2>Sign Up</h2>
         </div>
     </div>
-
     <div class="row formbox1">
             <div class="col-md-6 col-12 left-halfpage">
-
                     <form class=signup-form1 action="{% url 'accounts:signup' %}" method="post">
-            
-                
                         {% csrf_token %}
                         {{ form.as_p }}
             </div>
-             
             <div class="col-md-6 col-12  mt-md-0 mt-2 right-halfpage">   
                         {% csrf_token %}
                         {{ customerForm.as_p }}
-                
-            
-
-
-
             <div class="centered-button">
                 <input class="create-button" type="submit" value="Create Account">
             </div>
         </form>
-    </div>
-          
+    </div>     
 </div>
 </div>
+{{statement}}
 
-
-
-        {{statement}}
 {% endblock %}
