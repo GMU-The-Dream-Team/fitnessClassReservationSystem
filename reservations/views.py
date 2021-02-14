@@ -28,7 +28,8 @@ def reserve_view(request):
             available = temp_available
             availabilityTitle = 'Position on WaitList'
             available = (int(available) + 1)
-        (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
+        #(duplicate, duplicateMessage) = checkDuplicateReservation(1, dateFormated, getFitnessClass(classId)) #added to view reservations.html temporarily
+        (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId)) #original line
         rv = {
             'statement': statement,
             'className':className,
