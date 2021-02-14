@@ -7,6 +7,9 @@
     <table class="table table-bordered">
         <thead class="thead">
             <tr>
+                <th colspan="100%">Schedule</th>
+            </tr>
+            <tr>
                 <th scope="col">Day</th>
                 <th scope="col">Class Name</th>
                 <th scope="col">Instructor</th>
@@ -16,6 +19,7 @@
             </tr>
         </thead>
         <tbody class="tbody">
+        {% if numberOfClasses > 0 %}
             <tr>
                 {% for i in dayOrder%}
                     {% if i == 6 %}
@@ -244,6 +248,11 @@
                     {% endif %}               
                 {% endfor %}
             </tr>
+        {% else %}
+            <tr>
+                <td colspan="100%">No classes have been set up</td>
+            </tr>
+        {% endif %}
         </tbody>
     </table>
     <!--modification end -->

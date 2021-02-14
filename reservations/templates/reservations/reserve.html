@@ -23,15 +23,14 @@
                 {% if currentUser.is_staff %}
                     <p><label>First Name: </label>
 
-                        <input type="text" name="firstName"/>
+                        <input class="form-control" type="text" name="firstName"/>
 
                     <label>Last Name: </label>                    
-                        <input type="text" name="lastName"/>
+                        <input class="form-control" type="text" name="lastName"/>
                     
-                    <label>Phone Number: </label>                    
-                        <input type="phone" name="phoneNumber"/>                   
-                    <p>
-                        <label>Patronship: </label>
+                    <label for="phoneNumber">Phone Number: </label>
+                        <input type="tel" required id="phoneNumber" name="phoneNumber" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="ex: 123-123-1234">
+                    <label>Patronship: </label>
                             <select name="patronship" id="patronship">
                                 <option selected disabled>- Choose One -</option>
                                 <option value="Annual">Annual Pass Holder</option>

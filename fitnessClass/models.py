@@ -1,6 +1,4 @@
 from django.db import models
-from accounts.models import Customer
-from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
 class FitnessClass(models.Model):

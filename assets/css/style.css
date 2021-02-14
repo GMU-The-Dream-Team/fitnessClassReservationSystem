@@ -3,6 +3,7 @@
 
 
 /* Wajaat Start */
+
 title h1{
 	font-style: italic;
 }
@@ -52,6 +53,7 @@ font-weight: bold;
 }
 
 .thead{
+	font-size: x-large;
 	background-color:  #005C9A;
 	text-align: center;
 }
@@ -198,9 +200,118 @@ font-weight: bold;
 	color: #fff!important;
 }
 
+.navbutton{
+	border-color: black;
+	background-color: #900028;
+	font-weight: bold;
+	color: #fff;
+	
+}
+
+#loginbtn{
+	border-color: black;
+	background-color: #900028;
+	font-weight: bold;
+	color: #fff;
+	margin-right: 5px;
+	
+}
+
+#signupbtn{
+	border-color: black;
+	background-color: #900028;
+	font-weight: bold;
+	color: #fff;
+	
+}
+
 #credits {
 	margin: 5% auto;
 	position: absolute;
 	bottom: auto;
 	width: 100%;
 }
+
+.formbox1{
+	border: 1px solid black;
+}
+
+.left-halfpage{
+	padding-top: 2%;
+	border-right: 1px solid rgb(192, 192, 192);
+}
+
+.left-halfpage label{
+	padding-left: 5%;
+	font-weight:bold;
+	font-size:larger;
+	padding-right: 5%;
+}
+
+.left-halfpage input{
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+
+.left-halfpage span::after{
+	content: "\a";
+	white-space: pre;
+}
+
+.left-halfpage .helptext{
+	padding-left: 5%;
+	font-size: smaller;
+}
+
+.right-halfpage{
+	padding-top: 2%;
+	padding-left: 5%;
+}
+
+.right-halfpage label{
+    padding-left: 5%;
+	font-weight:bold;
+	font-size:larger;
+	padding-right: 5%;	
+}
+
+.right-halfpage input{
+	float:right;
+	margin-right: 20%;
+}
+
+.right-halfpage-field{
+	margin-bottom:10px;
+}
+
+.centered-button{
+	padding-top: 1%;
+	padding-right:  62%;
+	margin-bottom: 10%;
+}
+
+/*Mobile Styling Start*/
+
+@media only screen and (max-width: 600px) {
+
+	/*Mobile Sign Up Page*/
+	.right-halfpage{
+	padding-left: 18%;
+  }
+
+  .left-halfpage{
+	padding-left: 18%;
+	
+	}
+
+	.formbox1{
+	border-bottom: 1px solid black;
+	padding-bottom: 20px;
+	}
+
+	/*End Mobile Sign Up Page*/
+
+}
+
+/*Mobile Styling End*/

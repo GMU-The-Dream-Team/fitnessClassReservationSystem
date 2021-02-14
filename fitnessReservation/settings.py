@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'accounts',
     'fitnessClass',
     'reservations',
+
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'accounts.Account'
 
 WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>IDA LEE RESERVATION</title>  
     <!-- Bootstrap -->
-	<link href="{% static 'css/style.css' %}" rel="stylesheet">    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   </head>
@@ -24,28 +24,28 @@
             <li>
               <form action="{% url 'fitnessClass:schedule' %}">
                 {% csrf_token %}
-                <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Fitness Class Schedule</button>
+                <button id="loginbtn" class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Fitness Class Schedule</button>
               </form> 
             </li>          
             {% if user.is_staff %}                    
               <li>
                 <form action="{% url 'reservations:staffReservations' %}">
                   {% csrf_token %}
-                  <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">View Reservations</button>
+                  <button id="loginbtn" class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">View Reservations</button>
                 </form>  
               </li>             
             {% else %}
               <li>
                 <form action="{% url 'reservations:myReservations' %}">
                   {% csrf_token %}
-                  <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">My Reservations</button>
+                  <button id="loginbtn" class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">My Reservations</button>
                 </form> 
               </li>              
             {% endif %} 
             <li>
               <form action="{% url 'accounts:logout' %}">
                 {% csrf_token %}
-                <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Log Out</button>
+                <button id="loginbtn" class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Log Out</button>
               </form> 
             </li>             
           {% endif %}          

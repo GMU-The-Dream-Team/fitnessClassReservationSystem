@@ -1,5 +1,5 @@
 import datetime
-from accounts.models import Customer
+from accounts.models import *
 from django.shortcuts import redirect, render
 from . models import FitnessClass
 from django.contrib.auth.decorators import login_required
@@ -71,6 +71,8 @@ def schedule_view(request):
     key = '' + days[y]    
     datesList[key] = ((date.today() + timedelta(6)).strftime('%m-%d-%Y'))
 
+    numberOfClasses = len(sundayList) + len(mondayList) + len(tuesdayList) + len(wednesdayList) + len(thursdayList) + len(fridayList) + len(saturdayList)
+
     rv = {
         'sundayList':sundayList,
         'mondayList':mondayList,
@@ -84,13 +86,14 @@ def schedule_view(request):
         'dayOrder':dayOrder,
         'availableDays':availableDays,
         'statement': statement,
-        'currentUser': currentUser
+        'currentUser': currentUser,
+        'numberOfClasses': numberOfClasses
     }
     return render(request, 'fitnessClass/schedule.html', rv)
 
 def verifyCustomer(request):
     customerId = request.user.id
-    list = Customer.objects.all().filter(user = customerId)
+    list = Account.objects.all().filter(id = customerId)
     customer = ''
     for i in list:
         customer = i
