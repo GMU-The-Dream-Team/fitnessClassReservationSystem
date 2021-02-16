@@ -341,9 +341,9 @@ def checkClassPassed(fitnessClass, classDate):
             flag = True
             return (flag, t)
         else:
-            t = '*  Reservation can not be made for classes that have already started or have already taken place.'
+            t = '* Unable to reserve for classes that have already started or have already taken place.'
     else:
-        t = '* Reservation can not be made for classes in the Past.'
+        t = '* Unable to reserve for classes in the past.'
     return (flag, t)
 
 def checkUser(userInfo):
