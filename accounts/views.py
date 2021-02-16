@@ -1,4 +1,3 @@
-from django.core import exceptions
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from accounts.forms import UserForm

@@ -168,7 +168,10 @@ def myReservations_view(request):
             returnValue.append(i)
     return render(request, 'reservations/myReservations.html', {'reservations':returnValue})
 
+@login_required(login_url="accounts:login")
 def staffReservations_view(request):
+    if request.user.is_staff == False:
+        return redirect('fitnessClass:schedule')
     rv = {}
     if request.method == 'GET':
         rv['flag'] = True

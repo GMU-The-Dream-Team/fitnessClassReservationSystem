@@ -1,6 +1,6 @@
 import datetime
 from accounts.models import *
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from . models import FitnessClass
 from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
