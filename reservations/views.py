@@ -1,5 +1,4 @@
-from datetime import date, time
-from django.utils import timezone
+from datetime import date
 from django.shortcuts import render, redirect
 from datetime import datetime, date
 from . models import Reservation
@@ -7,9 +6,6 @@ from fitnessClass.models import FitnessClass
 from accounts.models import *
 from django.contrib.auth.decorators import login_required
 from accounts.forms import *
-
-
-
 
 # Create your views here.
 @login_required(login_url="accounts:login")
@@ -329,42 +325,26 @@ def checkDuplicateReservationStaff(classId, dateOfClass, customer):
         return (False, '')
 
 def checkClassPassed(fitnessClass, classDate):
-    returnedStartTime = FitnessClass.objects.values_list('startTime', flat=True).filter(id = fitnessClass.id)
-    given_time = returnedStartTime[0] #fitness class start time
-    now = datetime.now()
-    current_time = now.strftime('%I:%M %p')
     t = ''
-    
-    temp_classDate = str(classDate)
-    classDate = temp_classDate[0:10]
-    todayDate = date.today().strftime('%Y-%m-%d')
-    flag = True
-    if classDate < todayDate:
-        flag = False
-        t =  'The class date is in past'
-    elif todayDate == classDate:
-        if given_time[6:8] == 'AM' and current_time[6:8] == 'PM':
-            t = '* Reservation for past class cannot be made.'
-            flag = False
-        else: # same part of day
-            if int(given_time[0:2]) > int(current_time[0:2]): # compare Hour
-                t = '1 * Can Reserve'
-            elif int(given_time[0:2]) < int(current_time[0:2]):
-                t = 'Unable to reserve for classes in the past'
-                flag = False
-            else:
-                if int(given_time[3:5]) > int(current_time[3:5]): # compare Minute
-                    t = ''
-                elif int(given_time[3:5]) < int(current_time[3:5]):
-                    flag = False
-                    t = 'Unable to reserve, this class has already started'
-                else:
-                    flag = False
-    else:
-        t=''
-        flag = True
+    flag = False
+    startTime = fitnessClass.startTime
+    startDate = classDate
+    nT = datetime.now()
+    nowTime = nT.strftime('%I:%M %p')
+    nowDate = date.today().strftime('%Y-%m-%d')
 
-    return(flag, t)
+    if startDate > nowDate:
+        flag = True
+        return (flag, t)
+    elif startDate == nowDate:
+        if startTime > nowTime:
+            flag = True
+            return (flag, t)
+        else:
+            t = '*  Reservation can not be made for classes that have already started or have already taken place.'
+    else:
+        t = '* Reservation can not be made for classes in the Past.'
+    return (flag, t)
 
 def checkUser(userInfo):
     firstName = userInfo[0].lower()
