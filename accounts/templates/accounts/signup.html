@@ -1,21 +1,34 @@
 {% extends 'base_layout.html' %}
+{% load widget_tweaks %}
 
 {% block content%}
-    <h3>Signup page</h3>
-
-        <form class=signup-form action="{% url 'accounts:signup' %}" method="post">
-            <div class="signup-panel">
-                <div class="flex-child green">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                </div>
-                <div class="vertical-line"></div>
-                <div class="flex-child orange">
-                    {% csrf_token %}
-                    {{ customerForm.as_p }}
-                </div>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            {% if request.user.is_staff %}
+                <h2>Create Customer Account</h2>
+            {% else %}
+                <h2>Sign Up</h2>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row formbox1">
+            <div class="col-md-6 col-12 left-halfpage">
+                    <form class=signup-form1 action="{% url 'accounts:signup' %}" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <label>Phone Number: </label>         
+                        <input type="tel" required id="phoneNumber" name="phoneNumber" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Phone: 123-123-1234">
             </div>
-            <input class="create-button" type="submit" value="Create Account">
+            <div class="col-md-6 col-12  mt-md-0 mt-2 right-halfpage">   
+                        {% csrf_token %}
+            <div class="centered-button">
+                <input class="create-button" type="submit" value="Create Account">
+            </div>
         </form>
-        {{statement}}
+    </div>     
+</div>
+</div>
+{{statement}}
+
 {% endblock %}
