@@ -1,4 +1,5 @@
 {% extends 'base_layout.html' %}
+{% load  widget_tweaks %}
 
 {% block content%}
     <div class="container">
@@ -11,14 +12,24 @@
 
     <div class="reserve">
         <div class="flex-child">
-            <form id="reserve-form" action="{% url 'reservations:submission' %}" method="post">
+            
+                <form id="reserve-form" action="{% url 'reservations:submission' %}" method="post">
                 {% csrf_token %}
 
-                <h4>{{className}}</h4>
+                <h3>{{className}}</h3>
                 <h5>{{instructorName}}</h5>
                 <h6>{{startTime}} - {{endTime}}</h6>
                 <h6>Todays Date = {{today}}</h6>
 
+                {% if currentUser.is_staff %}
+                    {% for i in customerForm %}
+                        <p>{% render_field i placeholder=i.label %}</p>
+                    {% endfor %}
+     
+                {% endif %}
+
+
+                <input name="submitted" type="hidden" value="True"></input>
                 <input name="className" type="hidden" value="{{className}}"></input>
                 <input name="startTime" type="hidden" value="{{startTime}}"></input>
                 <input name="endTime" type="hidden" value="{{endTime}}"></input>
@@ -28,24 +39,44 @@
                 <input name="classId" type="hidden" value="{{classId}}"></input>
                 <input name="classDate" type="hidden" value="{{classDate}}"></input>  
                 <input name="date" type="hidden" value="{{today}}"></input>
-
-            {% if duplicate == False %}
-                   <p><input type="submit" value="Reserve"></p>
+            
+            {% if classPassedFlag == False %}
                 </form>
-            {% else %}
-                </form>
-                <p id="duplicate-message">{{duplicateMessage}}</p>
+                <p id="duplicate-message">{{classPassedMessage}}</p>
                 <p>
-                    <form action="{% url 'reservations:myReservations' %}">
-                        <input type="submit" value="View Reservations"/>
+                    {% if currentUser.is_staff %}
+                        <form action="{% url 'reservations:staffReservations' %}">
+                            <input type="submit" value="View Patron Reservations"/>
+                    {% else %}
+                        <form action="{% url 'reservations:myReservations' %}">
+                            <input type="submit" value="View Reservations"/>
+                    {% endif %}
                     </form>
                 </p>
-            {% endif %}            
+            {% else %}
+                {% if duplicate == False %}
+                    <p><input type="submit" value="Reserve"></p>
+                    </form>
+                {% else %}
+                    </form>
+                    <p id="duplicate-message">{{duplicateMessage}}</p>
+                    <p>
+                        {% if currentUser.is_staff %}
+                            <form action="{% url 'reservations:staffReservations' %}">
+                                <input type="submit" value="View Patron Reservations"/>
+                        {% else %}
+                            <form action="{% url 'reservations:myReservations' %}">
+                                <input type="submit" value="View Reservations"/>
+                        {% endif %}
+                        </form>
+                    </p>
+                {% endif %}            
+            {% endif %}
             <input type="button" value="Return to Class Schedule" onclick="history.back()">
         </div>
         <div class="flex-child">
             <table id="availability-table">
-                <th>{{availabilityTitle}} on {{classDate}}</th>
+                <th>{{availabilityTitle}} on <br/>{{classDate}}</th>
                 <tr>
                     <td>{{available}}</td>
                 </tr>
