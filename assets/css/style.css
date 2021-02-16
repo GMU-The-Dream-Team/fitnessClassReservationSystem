@@ -230,7 +230,6 @@ font-weight: bold;
 .left-halfpage{
 	padding-left: 18%;
 	border-right: 1px solid rgb(192, 192, 192);
-	padding-top: 3%;
 }
 
 .right-halfpage{
@@ -242,27 +241,75 @@ font-weight: bold;
 	margin-bottom:10px;
 }
 
+/*New Cust Reserve Page*/
+.conf-res-info{
+	margin-left: 33%;
+}
+
+.av-class-name{
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+
+.av-class-instructor-name{
+	font-weight: bold;
+	font-size: 1.25rem;	
+}
+.av-class-start-end{
+	font-weight: bold;
+	font-size: 1rem;	
+}
+.av-class-today{
+	font-weight: bold;
+	font-size: 1rem;	
+}
+
+.conf-res-available-border{
+	border: 1px solid #900028;
+	margin-left: -25%;
+	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/fall1.jpg');
+	/*background-image: url("../images/fall1.jpg");*/
+	background-size: cover;
+	border-radius: 25px;
+}
+
+.conf-res-available{
+	margin-top: 25%;
+	font-weight: bold;
+	color: #fff;	
+	
+}
+
+.conf-res-available-date{
+	font-size: 1.05rem;
+}
+
+.conf-res-number{
+	font-size: 5.5rem;
+	text-align: center;
+}
+/*End New Cust Reserve Page*/
+
 /*Mobile Styling Start*/
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 575px) {
 
 	/*Mobile Sign Up Page*/
-	
 	.right-halfpage{
-	padding-left: 18%;
-  }
+		padding-left: 18%;
+  	}
 
   	.left-halfpage{
-	padding-left: 18%;
+		padding-left: 18%;
 	}
 
 	.centered-button{
-	padding-left:33%;
+		padding-left:21%;
 	}
 
 	.formbox1{
-	border-bottom: 1px solid black;
-	padding-bottom: 20px;
+		border-bottom: 1px solid black;
+		padding-bottom: 20px;
 	}
 
 	.schedule{
@@ -271,14 +318,62 @@ font-weight: bold;
 
 	/*End Mobile Sign Up Page*/
 
-	/*Start Mobile Nav Bar*/
-
-	.logo{
-		max-width: 340px;
+	/*New Cust Reserve Page*/
+	.conf-res-info{
+		margin-left: 20%;
+		margin-bottom: 15px;
 	}
 
-	/*End Mobile Nav Bar*/
+	.conf-res-available-border{
+		border: none;
+		margin-left: 5%;
+		margin-right: 5%;
+		padding-left: 0%;
+		background: none;
+	}
+
+	.conf-res-available{
+	margin-top: 0%;
+	font-weight: bold;
+	color: #900028;	
+	}
+
+	.conf-res-number{
+	font-size: 5.5rem;
+	text-align: center;
+	}
+
+	.conf-res-available-date{
+	font-size: 1.05rem;
+	text-align: center;
+	}
+
+	/*End New Cust Reserve Page*/
 
 }
 
 /*Mobile Styling End*/
+
+
+/*Med Tablet Styling Start*/
+
+@media only screen and (min-width: 576px) and (max-width: 991px) {
+	.conf-res-available-border{
+		border: 1px solid #900028;
+		margin-left: -15%;
+		background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/fall1.jpg');
+		background-size: cover;
+		border-radius: 25px;
+	}
+
+	.conf-res-info{
+		margin-left: 25%;
+		margin-bottom: 15px;
+	}
+
+}
+
+
+
+
+/*Med Tablet Styling Start*/

@@ -9,15 +9,17 @@
         </div>
     </div>
 
-    <div class="reserve">
-        <div class="flex-child">
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-9 col-lg-9">
+              <div class="conf-res-info">
             <form id="reserve-form" action="{% url 'reservations:submission' %}" method="post">
                 {% csrf_token %}
 
-                <h4>{{className}}</h4>
-                <h5>{{instructorName}}</h5>
-                <h6>{{startTime}} - {{endTime}}</h6>
-                <h6>Todays Date = {{today}}</h6>
+                <p class="av-class-name">{{className}}</p>
+                <p class="av-class-instructor-name">{{instructorName}}</p>
+                <p class="av-class-start-end">{{startTime}} - {{endTime}}</p>
+                <p class="av-class-today">Todays Date : {{today}}</p>
 
                 <input name="className" type="hidden" value="{{className}}"></input>
                 <input name="startTime" type="hidden" value="{{startTime}}"></input>
@@ -43,13 +45,11 @@
             {% endif %}            
             <input type="button" value="Return to Class Schedule" onclick="history.back()">
         </div>
-        <div class="flex-child">
-            <table id="availability-table">
-                <th>{{availabilityTitle}} on {{classDate}}</th>
-                <tr>
-                    <td>{{available}}</td>
-                </tr>
-            </table>
+    </div>
+    <div class="col-sm-3 col-lg-3 conf-res-available-border">
+        <div class="conf-res-available">
+            <p class="conf-res-available-date">{{availabilityTitle}} on {{classDate}}</p>
+                <p class="conf-res-number">{{available}}</p>
         </div>
     </div>
 {% endblock %}
