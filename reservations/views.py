@@ -1,16 +1,20 @@
 from datetime import date
-from django.db.models.fields import DateField
 from django.shortcuts import render, redirect
-from datetime import datetime, date, timedelta
-from . models import Reservation, WaitList
+from datetime import datetime, date
+from . models import Reservation
 from fitnessClass.models import FitnessClass
-from accounts.models import Customer
+from accounts.models import *
 from django.contrib.auth.decorators import login_required
-
+from accounts.forms import *
 
 # Create your views here.
 @login_required(login_url="accounts:login")
 def reserve_view(request):
+    currentUser = request.user
+    duplicate = False
+    newUserFlag = True
+    duplicateMessage = ''
+    customerForm = staffCustomerForm() 
     if request.method == 'POST':
         statement = ''
         className = request.POST.get('className')
@@ -20,7 +24,6 @@ def reserve_view(request):
         classDate = request.POST.get('date')
         classId = request.POST.get('classId')
         today = (date.today().strftime('%m-%d-%Y'))
-        availabilityTitle = 'Available Space'
         dateFormated = formatDate(classDate)        
         (available, max) = availability(classId, dateFormated)
         if available < 1:
@@ -28,8 +31,13 @@ def reserve_view(request):
             available = temp_available
             availabilityTitle = 'Position on WaitList'
             available = (int(available) + 1)
-        #(duplicate, duplicateMessage) = checkDuplicateReservation(1, dateFormated, getFitnessClass(classId)) #added to view reservations.html temporarily
-        (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId)) #original line
+        elif available >= 10:
+            availabilityTitle = 'OverDraft Room Availability'
+        else:
+            availabilityTitle = 'Availability'
+        
+        (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
+        (classPassedFlag, classPassedMessage) = checkClassPassed(getFitnessClass(classId), dateFormated)
         rv = {
             'statement': statement,
             'className':className,
@@ -42,91 +50,132 @@ def reserve_view(request):
             'available':available,
             'classId':classId,
             'duplicate':duplicate,
-            'duplicateMessage':duplicateMessage
+            'duplicateMessage':duplicateMessage,
+            'classPassedFlag': classPassedFlag,
+            'classPassedMessage': classPassedMessage,
+            'currentUser': currentUser,
+            'customerForm': customerForm,
+            'newUserFlag': newUserFlag,
         }
         return render(request, 'reservations/reserve.html', rv)
     else:
         return redirect('fitnessClass:schedule')
 
+
 @login_required(login_url="accounts:login")
 def submission_view(request):
-    classId = request.POST.get('classId')
-    classDate = request.POST.get('classDate')
-    dateFormated = formatDate(classDate)
-    (available, max) = availability(classId, dateFormated)
-    statement = []
+    if request.method == "POST":
+        customerReserving = None
+        userExists = True
+        submitted = request.POST.get('submitted')
+        currentUser = request.user
+        classId = request.POST.get('classId')
+        classDate = request.POST.get('classDate')
+        dateFormated = formatDate(classDate)
+        duplicateReservation = False
+
+        if request.user.is_staff:
+            #check if customer has an account otherwise send flag that will allow them to see the create account button
+            firstName = request.POST.get('firstName').lower().strip()
+            lastName = request.POST.get('lastName').lower().strip()
+            email = request.POST.get('email').lower().strip()
+            (userExists, user) = checkUser([firstName, lastName, email])
+            if userExists:
+                customerReserving = user
+                (flag, value) = checkDuplicateReservationStaff(classId, dateFormated, user)
+                if flag == True:
+                    statement = value
+                    return render(request, 'reservations/submission.html', {'statement':statement, 'userExists':userExists, 'duplicateReservation':flag})        
+            else:
+                statement = "* User with the given information does not have an account. Please ensure all entered data is valid. Otherwise please create an account first and then create a reservation."
+                return render(request, 'reservations/submission.html', {'statement':statement, 'userExists':userExists, 'duplicateReservation': duplicateReservation})        
+
+        (available, max) = availability(classId, dateFormated)
+        statement = {}
+        statement['currentUser'] = currentUser
+        list = FitnessClass.objects.all().filter(id = classId)
+
+        fitnessClass = ''
+        for i in list:
+            fitnessClass = i
     
-    list = FitnessClass.objects.all().filter(id = classId)
-
-    fitnessClass = ''
-    for i in list:
-        fitnessClass = i
-   
-    reservationInstance = Reservation()
-    reservationInstance.classReserved = fitnessClass
-    reservationInstance.customerReserving = getCustomer(request)
-    reservationInstance.classDate = dateFormated
-    reservationInstance.reservationDate = datetime.now().today()
-    reservationInstance.reservationTime = datetime.now().time()
-
-    statement.append(f'Reservation made for \n{classDate}')
-    statement.append(f'\n {reservationInstance.classReserved}')    
-    statement.append(f'by {(reservationInstance.customerReserving)}')
-
-    temp_waitList = WaitList()
-    temp_waitList.save()
-    nId = temp_waitList.id
-    
-    if int(max) > 9:
-        if int(available) > 10:
-            reservationInstance.reservationStatus = 'Reserved'
-        elif int(available) <= 10 and int(available) > 0:
-            reservationInstance.reservationStatus = 'OverDraft'
+        reservationInstance = Reservation()
+        reservationInstance.classReserved = fitnessClass
+        duplicateFlag = False
+        statement['duplicateFlag'] = duplicateFlag
+        
+        if currentUser.is_staff:
+            customerId = customerReserving.id
+            list = Account.objects.all().filter(id = customerId)
+            customer = ''
+            for i in list:
+                customer = i
+            reservationInstance.customerReserving = customer
         else:
-            reservationInstance.reservationStatus = 'WaitList'
-            reservationInstance.waitNumber = nId
-    else:
-        if int(available) > 0:
-            reservationInstance.reservationStatus = 'Reserved'
+            reservationInstance.customerReserving = getCustomer(request)
+
+        if duplicateFlag == False:
+            reservationInstance.classDate = dateFormated
+            reservationInstance.reservationTimeStamp = datetime.now()
+            statement['classDate'] = classDate
+            statement['classReserved'] = reservationInstance.classReserved
+            statement['customerReserving'] =  reservationInstance.customerReserving
+
+            if int(max) > 9:
+                if int(available) > 10:
+                    reservationInstance.reservationStatus = 'Reserved'
+                elif int(available) <= 10 and int(available) > 0:
+                    reservationInstance.reservationStatus = 'OverDraft'
+                else:
+                    reservationInstance.reservationStatus = 'WaitList'
+            else:
+                if int(available) > 0:
+                    reservationInstance.reservationStatus = 'Reserved'
+                else:
+                    reservationInstance.reservationStatus = 'WaitList'
+            
+            if submitted == 'True':
+                reservationInstance.save()
+                
+            statement['reservationStatus'] = reservationInstance.reservationStatus
+            waitList = getWaitListPosition(dateFormated, reservationInstance)
+            statement['waitListPosition'] = 0
+            if waitList > 0:
+                statement['waitListPosition'] = waitList + 1
+            statement['currentUser'] = currentUser
+            return render(request, 'reservations/submission.html', statement)
         else:
-            reservationInstance.reservationStatus = 'WaitList'
-            reservationInstance.waitNumber = nId
-    reservationInstance.save()    
-
-    waitList = getWaitListPosition(dateFormated, nId)
-    if waitList > 0:
-        statement.append(f'Wait List Position: {waitList + 1}')
-
-    return render(request, 'reservations/submission.html', {'statement':statement})    
+            return render(request, 'reservations/submission.html', statement)
 
 @login_required(login_url="accounts:login")
 def myReservations_view(request):
     returnValue = []  
     if request.method == 'POST':
         reservationId = request.POST.get('reservationId')
-        intId = Reservation.objects.all().filter(id = reservationId)
-        temp_id = None
-        for i in intId:
-            temp_id = i.id
+        intId = Reservation.objects.values_list('id', flat=True).filter(id = reservationId)
+        temp_id = intId[0]
         Reservation.objects.filter(id = temp_id).delete()
-    currentUser = request.user
-    customer = Customer.objects.all().filter(user = currentUser)
+    currentUser = request.user.id
+    customer = Account.objects.all().filter(id = currentUser)
     customerId = ''
     for i in customer:
-        customerId = i.id
+        customerId = i
     todaysDate = date.today()
     select = Reservation.objects.all().filter(customerReserving = customerId).order_by('-classDate')
+
     for i in select:
-        if i.reservationDate >= todaysDate:
-            returnValue.append(i) 
+        if i.classDate >= todaysDate:
+            returnValue.append(i)
     return render(request, 'reservations/myReservations.html', {'reservations':returnValue})
 
+@login_required(login_url="accounts:login")
 def staffReservations_view(request):
+    if request.user.is_staff == False:
+        return redirect('fitnessClass:schedule')
     rv = {}
     if request.method == 'GET':
-        rv['statement'] = 'This is a get request'
         rv['flag'] = True
-        select = FitnessClass.objects.all()
+        select = FitnessClass.objects.all().order_by("dayOfWeek")
         classList = {}
         counter = 0
         for i in select:
@@ -135,8 +184,30 @@ def staffReservations_view(request):
         rv['classList'] = classList
         return render(request, 'reservations/staffReservations.html', rv)
     else:
+        action = request.POST.get('action')
+        if action == 'cancel':
+            temp_id = request.POST.get('reservationId')
+            Reservation.objects.filter(id = temp_id).delete()
+        elif action == 'overDraftToReserved':
+            temp_id = request.POST.get('reservationId')
+            r = Reservation.objects.get(id = temp_id)
+            r.reservationStatus = 'Reserved'
+            r.save()
+        elif action == 'waitListToOverDraft':
+            temp_id = request.POST.get('reservationId')
+            r = Reservation.objects.get(id = temp_id)
+            r.reservationStatus = 'OverDraft'
+            r.save()
+        elif action == 'waitListToReserved':
+            temp_id = request.POST.get('reservationId')
+            r = Reservation.objects.get(id = temp_id)
+            r.reservationStatus = 'Reserved'
+            r.save()
+        else:
+            ''
+
         classId = request.POST.get('classId')
-        select = Reservation.objects.all().filter(classReserved = getFitnessClass(classId))
+        select = Reservation.objects.all().filter(classReserved = getFitnessClass(classId)).order_by('reservationTimeStamp')
         reservedList = {}
         waitList = {}
         overDraftList = {}
@@ -145,7 +216,13 @@ def staffReservations_view(request):
         reservedCounter = 0
         overDraftCounter = 0
         waitListCounter = 0
+        cName = FitnessClass.objects.all().filter(id = classId)
+        classTitle = ''
+        for i in cName:
+            classTitle = f'{i.className} - {i.dayOfWeek}'
+        classMaximum = 0
         for i in select:
+            classMaximum = i.classReserved.maximumCapacity
             (flag, value) = checkDate(i.classDate)
             if flag == True:
                 counter = i.id
@@ -165,13 +242,15 @@ def staffReservations_view(request):
                 rv['statement'] = value
                 rv['flag'] = False
                 return render(request, 'reservations/staffReservations.html', rv)
+        reservedAndOverDraftTotal = reservedCounter + overDraftCounter
         rv['reservedCounter'] = reservedCounter
         rv['waitListCounter'] = waitListCounter
         rv['overDraftCounter'] = overDraftCounter
-
-
-        rv['statement'] = 'This is a post request'
         rv['flag'] = False
+        rv['classTitle'] = classTitle
+        rv['classMaximum'] = int(classMaximum)
+        rv['overDraftMaximum'] = 10
+        rv['reservedAndOverDraftTotal'] = reservedAndOverDraftTotal
         return render(request, 'reservations/staffReservations.html', rv)
 
 def availability(classId, date):
@@ -186,7 +265,6 @@ def formatDate(date):
     return (dateStr)
 
 def checkDate(dateOfClass):
-    #classDate = dateOfClass[6:11] + '-' + dateOfClass[0:2] + '-' + dateOfClass[3:5]
     temp_classDate = str(dateOfClass)
     classDate = temp_classDate[0:10]
     todayDate = date.today().strftime('%Y-%m-%d')
@@ -197,7 +275,7 @@ def checkDate(dateOfClass):
 
 def getCustomer(request):
     customerId = request.user.id
-    list = Customer.objects.all().filter(user = customerId)
+    list = Account.objects.all().filter(id = customerId)
     customer = ''
     for i in list:
         customer = i
@@ -210,12 +288,12 @@ def getFitnessClass(classId):
         fitnessClass = i
     return fitnessClass
 
-def getWaitListPosition(dateOfClass, currentWaitNumber):
-    list = Reservation.objects.filter(classDate = dateOfClass)
+def getWaitListPosition(dateOfClass, currentReservation):
+    list = Reservation.objects.filter(classReserved = currentReservation.classReserved, classDate = dateOfClass, reservationStatus = "WaitList")
     count = 0
     for line in list:
-        waitNumber = line.waitNumber
-        if waitNumber > 0 and waitNumber < currentWaitNumber:
+        resTimeStamp = line.reservationTimeStamp
+        if currentReservation.reservationTimeStamp > resTimeStamp:
             count += 1
     return count
 
@@ -231,9 +309,54 @@ def cancelFunction(dateOfClass, currentWaitNumber):
                 id = line.id
     return id
 
+#checks for duplicate reservations when a customer is reserving
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
     if count > 0 :
         return (True, f'* You have already reserved for this class')
+    else:
+        return (False, '')
+
+def checkDuplicateReservationStaff(classId, dateOfClass, customer):
+    reservations = Reservation.objects.filter(classReserved = classId, classDate = dateOfClass, customerReserving = customer)
+    if len(reservations) > 0:
+        duplicate = None
+        for i in reservations:
+            duplicate = i
+        return (True, f'{duplicate.customerReserving.firstName} already has a reservation made for {duplicate.classReserved.className} @ {duplicate.classReserved.startTime} on {duplicate.classReserved.dayOfWeek} - {duplicate.classDate}')
+    else:
+        return (False, '')
+
+def checkClassPassed(fitnessClass, classDate):
+    t = ''
+    flag = False
+    startTime = fitnessClass.startTime
+    startDate = classDate
+    nT = datetime.now()
+    nowTime = nT.strftime('%I:%M %p')
+    nowDate = date.today().strftime('%Y-%m-%d')
+
+    if startDate > nowDate:
+        flag = True
+        return (flag, t)
+    elif startDate == nowDate:
+        if startTime > nowTime:
+            flag = True
+            return (flag, t)
+        else:
+            t = '* Unable to reserve for classes that have already started or have already taken place.'
+    else:
+        t = '* Unable to reserve for classes in the past.'
+    return (flag, t)
+
+def checkUser(userInfo):
+    firstName = userInfo[0].lower()
+    lastName = userInfo[1].lower()
+    email = userInfo[2].lower()
+
+    account = Account.objects.all().filter(firstName = firstName, lastName = lastName, email = email)
+    if len(account) > 0:
+        for i in account:
+            return (True, i)
     else:
         return (False, '')
