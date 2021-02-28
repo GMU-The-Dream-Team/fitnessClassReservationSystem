@@ -62,12 +62,11 @@ font-weight: bold;
 	text-align: center;
 }
 
-.signup-form{
-	max-width: 100%;
-	border: 1px solid black;
-	padding: 3%
-}
 
+
+.centered-button{
+	padding-left:21%;
+}
 
 .signup-panel{
     display: flex;
@@ -225,6 +224,8 @@ font-weight: bold;
 
 .formbox1{
 	border: 1px solid black;
+	padding-top: 15px;
+	margin-left: 20%;
 }
 
 .left-halfpage{
@@ -267,7 +268,7 @@ font-weight: bold;
 .conf-res-available-border{
 	border: 1px solid #900028;
 	margin-left: -25%;
-	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/fall1.jpg');
+	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../images/fall1.jpg');
 	/*background-image: url("../images/fall1.jpg");*/
 	background-size: cover;
 	border-radius: 25px;
@@ -288,6 +289,17 @@ font-weight: bold;
 	font-size: 5.5rem;
 	text-align: center;
 }
+
+.signup-form{
+	max-width: 100%;
+	border: 1px solid black;
+	padding: 3%
+}
+
+.signup-full{
+	padding-left: 20% !important;
+}
+
 /*End New Cust Reserve Page*/
 
 /*Mobile Styling Start*/
@@ -296,20 +308,21 @@ font-weight: bold;
 
 	/*Mobile Sign Up Page*/
 	.right-halfpage{
-		padding-left: 18%;
-  	}
+	padding-left: 18%;
+  }
 
-  	.left-halfpage{
-		padding-left: 18%;
+  .left-halfpage{
+	padding-left: 18%;
+	
 	}
 
 	.centered-button{
-		padding-left:21%;
+	padding-left:21%;
 	}
 
 	.formbox1{
-		border-bottom: 1px solid black;
-		padding-bottom: 20px;
+	border-bottom: 1px solid black;
+	padding-bottom: 20px;
 	}
 
 	.schedule{
@@ -325,11 +338,11 @@ font-weight: bold;
 	}
 
 	.conf-res-available-border{
-		border: none;
-		margin-left: 5%;
-		margin-right: 5%;
-		padding-left: 0%;
-		background: none;
+	border: none;
+	margin-left: 5%;
+	margin-right: 5%;
+	padding-left: 0%;
+	background: none;
 	}
 
 	.conf-res-available{
@@ -361,7 +374,8 @@ font-weight: bold;
 	.conf-res-available-border{
 		border: 1px solid #900028;
 		margin-left: -15%;
-		background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/fall1.jpg');
+		background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../images/fall1.jpg');
+		/*background-image: url("../images/fall1.jpg");*/
 		background-size: cover;
 		border-radius: 25px;
 	}
@@ -376,4 +390,4 @@ font-weight: bold;
 
 
 
-/*Med Tablet Styling End*/
+/*Med Tablet Styling Start*/
