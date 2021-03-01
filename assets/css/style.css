@@ -72,26 +72,10 @@ font-weight: bold;
     display: flex;
     margin: 2% 2% 2% 2%;
 }
-.flex-child {
-    flex: 1;   
-}  
-.flex-child:first-child {
-    margin-right: 21%;
-}
-.flex-child p{
-	padding-bottom: 5%
-}
 
 .create-button{
 	margin: 3% 2% 3% 2%;
 }
-
-.vertical-line{ 
-    border-right: 1px solid grey; 
-    height: 600px; 
-    position:absolute; 
-    left: 50%;
-} 
 
 #footer{
   margin: 3% auto auto auto;
@@ -265,6 +249,11 @@ font-weight: bold;
 	font-size: 1rem;	
 }
 
+.av-error-msg{
+	padding-right: 300px;
+	color: red; 
+}
+
 .conf-res-available-border{
 	border: 1px solid #900028;
 	margin-left: -25%;
@@ -361,6 +350,11 @@ font-weight: bold;
 	text-align: center;
 	}
 
+	.av-error-msg{
+		padding-right: 0px;
+		color: red; 
+	}
+
 	/*End New Cust Reserve Page*/
 
 }
@@ -371,11 +365,11 @@ font-weight: bold;
 /*Med Tablet Styling Start*/
 
 @media only screen and (min-width: 576px) and (max-width: 991px) {
-	.conf-res-available-border{
+	/*.conf-res-available-border{
 		border: 1px solid #900028;
 		margin-left: -15%;
 		background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../images/fall1.jpg');
-		/*background-image: url("../images/fall1.jpg");*/
+		
 		background-size: cover;
 		border-radius: 25px;
 	}
@@ -383,6 +377,40 @@ font-weight: bold;
 	.conf-res-info{
 		margin-left: 25%;
 		margin-bottom: 15px;
+	}*/
+
+	.conf-res-info{
+		margin-left: 40%;
+		margin-bottom: 15px;
+	}
+
+	.conf-res-available-border{
+	border: none;
+	margin-left: 40%;
+	margin-right: 5%;
+	padding-left: 0%;
+	background: none;
+	}
+
+	.conf-res-available{
+	margin-top: 0%;
+	font-weight: bold;
+	color: #900028;	
+	}
+
+	.conf-res-number{
+	font-size: 5.5rem;
+	text-align: center;
+	}
+
+	.conf-res-available-date{
+	font-size: 1.05rem;
+	text-align: center;
+	}
+
+	.av-error-msg{
+		padding-right: 0px;
+		color: red; 
 	}
 
 }

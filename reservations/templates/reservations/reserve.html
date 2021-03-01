@@ -43,7 +43,7 @@
                 <input name="date" type="hidden" value="{{today}}"></input>
 
                 {% if classPassedFlag == False %}
-                <p id="duplicate-message">{{classPassedMessage}}</p>
+                <p class="av-error-msg">{{classPassedMessage}}</p>
             </form>
             <p>
                 {% if currentUser.is_staff %}
