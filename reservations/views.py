@@ -26,6 +26,7 @@ def reserve_view(request):
         today = (date.today().strftime('%m-%d-%Y'))
         dateFormated = formatDate(classDate)        
         (available, max) = availability(classId, dateFormated)
+
         if int(max) >= 10:
             if int(available) >= 10:
                 availabilityTitle = 'Availability'
@@ -34,10 +35,13 @@ def reserve_view(request):
             else:
                 availabilityTitle = 'Position on WaitList'
         else:
-            temp_available = f'{-(available)}'
-            available = temp_available
-            availabilityTitle = 'Position on WaitList'
-            available = (int(available) + 1)
+            if int(available) < 1:
+                temp_available = f'{-(available)}'
+                available = temp_available
+                availabilityTitle = 'Position on WaitList'
+                available = (int(available) + 1)
+            else:
+                availabilityTitle = 'Availability'
         
         (duplicate, duplicateMessage) = checkDuplicateReservation(getCustomer(request), dateFormated, getFitnessClass(classId))
         (classPassedFlag, classPassedMessage) = checkClassPassed(getFitnessClass(classId), dateFormated)
