@@ -184,10 +184,15 @@ def staffReservations_view(request):
         rv['flag'] = True
         select = FitnessClass.objects.all().order_by("dayOfWeek")
         classList = {}
+        days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        flag = False
         counter = 0
-        for i in select:
-            counter = i.id            
-            classList[counter] = i
+        while counter < len(days):
+            for i in select:
+                if i.dayOfWeek == days[counter]:
+                    classList[i.id] = i
+                    break
+            counter += 1
         rv['classList'] = classList
         return render(request, 'reservations/staffReservations.html', rv)
     else:
@@ -349,7 +354,16 @@ def checkClassPassed(fitnessClass, classDate):
             return(True, '* This class has already started or has already taken place today. Can not reserve !!!')
         # same date - same half of the day i.e. (AM and AM) or (PM and PM)
         elif startTime[6:] ==  nowTime[6:]:
-            return(False, '* Class time and now time are the same')
+            # same date - same am/pm, Check hour of day and minutes
+            if startTime[0:2] > nowTime[0:2]:
+                return(False, '* This class startime hour is in the future')
+            elif startTime[0:2] == nowTime[0:2]:
+                if startTime[3:5] >= nowTime[3:5]:
+                    return(False, '* Class start time minutes are greater than or equal to now time minutes')
+                else:
+                    return(True, '* This class has already started or has already taken place today. Can not reserve !!!')
+            else:
+                return(True, '* This class has already started or has already taken place today. Can not reserve !!!')
         # same date - start time is in PM - now time is in AM. Return class passed flag as false, and allow reservation.
         else:
             return(False, '* Class is later in the day')
