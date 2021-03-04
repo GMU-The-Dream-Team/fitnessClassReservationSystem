@@ -335,26 +335,26 @@ def checkDuplicateReservationStaff(classId, dateOfClass, customer):
         return (False, '')
 
 def checkClassPassed(fitnessClass, classDate):
-    t = ''
-    flag = False
-    startTime = fitnessClass.startTime
+    startTime = str(fitnessClass.startTime)
     startDate = classDate
     nT = datetime.now()
     nowTime = nT.strftime('%I:%M %p')
     nowDate = date.today().strftime('%Y-%m-%d')
 
     if startDate > nowDate:
-        flag = True
-        return (flag, t)
+        return(False, '* Class date is in the future.')
     elif startDate == nowDate:
-        if startTime > nowTime:
-            flag = True
-            return (flag, t)
+        # same date - start time is in AM - now time is PM. Return True since class has already passed.
+        if startTime[6:] == 'AM' and nowTime[6:] == 'PM':
+            return(True, '* This class has already started or has already taken place today. Can not reserve !!!')
+        # same date - same half of the day i.e. (AM and AM) or (PM and PM)
+        elif startTime[6:] ==  nowTime[6:]:
+            return(False, '* Class time and now time are the same')
+        # same date - start time is in PM - now time is in AM. Return class passed flag as false, and allow reservation.
         else:
-            t = '* Unable to reserve for classes that have already started or have already taken place.'
+            return(False, '* Class is later in the day')
     else:
-        t = '* Unable to reserve for classes in the past.'
-    return (flag, t)
+        return(True, '* Class dates are from the past. Can not reserve !!!')
 
 def checkUser(userInfo):
     firstName = userInfo[0].lower()
