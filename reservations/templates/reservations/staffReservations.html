@@ -36,6 +36,10 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                        <tr>
+                            <td colspan="100%"><input type="button" value="Go Back . . ." onclick="history.back()">
+                            </td>
+                        </tr>  
                     </table>
                 </div>    
             {% else %}
@@ -252,12 +256,14 @@
                         {% else %}
                             <tr>
                                 <td colspan="100%">No Waitlisted Reservations</td>
-                            </tr>
+                            </tr>                          
                         {% endif %}
+                        <tr>
+                            <td colspan="100%"><input type="button" value="Return to Classes Offered" onclick="history.back()">
+                            </td>
+                        </tr>  
                     </table>
                 </div>
             {% endif %}
     </div>
-
-
 {% endblock %}
