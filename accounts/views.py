@@ -1,36 +1,39 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
+from accounts.forms import UserForm
 from django.contrib.auth import login, logout
-from . import forms
-from . models import Customer
+from . models import *
 
 def signup_view(request):
     statement = ''
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        custForm = forms.CustomerForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
-            if custForm.is_valid():
-                    user = form.save(commit=False)                
-                    instance = Customer()
-                    instance.email = custForm.cleaned_data.get('email')
-                    instance.firstName = custForm.cleaned_data.get('firstName')
-                    instance.lastName = custForm.cleaned_data.get('lastName')
-                    instance.street = custForm.cleaned_data.get('street')
-                    instance.city = custForm.cleaned_data.get('city')
-                    instance.state = custForm.cleaned_data.get('state')                
-                    instance.zipcode = custForm.cleaned_data.get('zipcode')
-                    instance.phoneNumber = custForm.cleaned_data.get('phoneNumber')
-                    instance.verified = 'UnVerified'
-                    instance.user = user
-                    user = form.save()                                    
-                    instance.save()
-                    login(request, user)
-                    return redirect('fitnessClass:schedule')
+            email = form.cleaned_data.get('email').lower().strip()
+            username = form.cleaned_data.get('username').lower().strip()
+            firstName = form.cleaned_data.get('firstName').lower().strip()
+            lastName = form.cleaned_data.get('lastName').lower().strip()
+            street = form.cleaned_data.get('street').lower().strip()
+            city = form.cleaned_data.get('city').lower().strip()
+            state = form.cleaned_data.get('state').lower().strip()           
+            zipcode = form.cleaned_data.get('zipcode').lower().strip()
+            phoneNumber = request.POST.get('phoneNumber').lower().strip()
+            password = form.cleaned_data.get('password1').strip()
+            try:
+                user = Account.objects.create_user(email, username, firstName, lastName, street, city, state, zipcode, phoneNumber, password)
+            except ValueError as e:
+                errorMessage = e
+                return render(request, 'accounts/signup.html', {'form': form, 'statement':errorMessage})
+            if request.user.is_staff:
+                return redirect('fitnessClass:schedule')
+            login(request, user)
+            return redirect('fitnessClass:schedule')
+        else:
+            statement = ""
     else:
-        form = UserCreationForm()
-        custForm = forms.CustomerForm()
-    return render(request, 'accounts/signup.html', { 'form': form, 'customerForm': custForm , 'statement':statement })
+        form = UserForm()
+    return render(request, 'accounts/signup.html', { 'form': form, 'statement':statement })
+
 
 def login_view(request):
     if request.method == 'POST':

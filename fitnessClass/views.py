@@ -1,5 +1,5 @@
 import datetime
-from accounts.models import Customer
+from accounts.models import *
 from django.shortcuts import render
 from . models import FitnessClass
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,7 @@ from datetime import date, timedelta
 @login_required(login_url="accounts:login")
 def schedule_view(request):
 
+    currentUser = request.user
     sundayList = FitnessClass.objects.all().filter(dayOfWeek = 'Sunday').order_by('startTime')
     mondayList = FitnessClass.objects.all().filter(dayOfWeek = 'Monday').order_by('startTime')
     tuesdayList = FitnessClass.objects.all().filter(dayOfWeek = 'Tuesday').order_by('startTime')
@@ -70,6 +71,8 @@ def schedule_view(request):
     key = '' + days[y]    
     datesList[key] = ((date.today() + timedelta(6)).strftime('%m-%d-%Y'))
 
+    numberOfClasses = len(sundayList) + len(mondayList) + len(tuesdayList) + len(wednesdayList) + len(thursdayList) + len(fridayList) + len(saturdayList)
+
     rv = {
         'sundayList':sundayList,
         'mondayList':mondayList,
@@ -82,13 +85,15 @@ def schedule_view(request):
         'datesList':datesList,
         'dayOrder':dayOrder,
         'availableDays':availableDays,
-        'statement': statement
+        'statement': statement,
+        'currentUser': currentUser,
+        'numberOfClasses': numberOfClasses
     }
     return render(request, 'fitnessClass/schedule.html', rv)
 
 def verifyCustomer(request):
     customerId = request.user.id
-    list = Customer.objects.all().filter(user = customerId)
+    list = Account.objects.all().filter(id = customerId)
     customer = ''
     for i in list:
         customer = i

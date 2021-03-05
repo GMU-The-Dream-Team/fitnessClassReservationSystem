@@ -60,6 +60,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'accounts.Account'
+
 WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 
 
@@ -68,12 +70,8 @@ WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
-        'PORT': 3306,
-        'NAME': 'dreamteam',
-        'USER': 'dreamteam_user',
-        'PASSWORD': 'WW!mW@3G94s6s^fz^ddY'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -108,7 +106,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
