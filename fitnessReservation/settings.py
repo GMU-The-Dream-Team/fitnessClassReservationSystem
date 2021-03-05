@@ -70,8 +70,12 @@ WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'dreamteam-001.c1oqqbxadjw6.us-east-1.rds.amazonaws.com',
+        'PORT': 3306,
+        'NAME': 'dreamteam',
+        'USER': 'dreamteam_user',
+        'PASSWORD': 'WW!mW@3G94s6s^fz^ddY'
     }
 }
 
