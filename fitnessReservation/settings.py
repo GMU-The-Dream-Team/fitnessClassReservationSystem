@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'fitnessClass',
+    'helpVids',
     'reservations',
     'widget_tweaks',
 ]
@@ -70,12 +71,8 @@ WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'dreamteam-001.c1oqqbxadjw6.us-east-1.rds.amazonaws.com',
-        'PORT': 3306,
-        'NAME': 'dreamteam',
-        'USER': 'dreamteam_user',
-        'PASSWORD': 'WW!mW@3G94s6s^fz^ddY'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -110,7 +107,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
