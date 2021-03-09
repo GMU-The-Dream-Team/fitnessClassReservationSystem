@@ -8,7 +8,7 @@ class Reservation(models.Model):
     customerReserving = models.ForeignKey(Account, null=True, on_delete=models.CASCADE)
     classDate = models.DateField(default=None)
     reservationStatus = models.CharField(max_length=20, default=None)
-    reservationTimeStamp = models.DateTimeField(auto_now_add=True, blank=True)
+    reservationTimeStamp = models.DateTimeField(auto_now_add=True)
 
     # Reservation Date = {self.reservationDate}, Reservation Time = {self.reservationTime}
     def __str__(self):
