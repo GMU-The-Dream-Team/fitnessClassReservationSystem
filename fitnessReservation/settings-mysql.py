@@ -60,6 +60,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'accounts.Account'
+
 WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 
 
@@ -69,7 +71,7 @@ WSGI_APPLICATION = 'fitnessReservation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
+        'HOST': 'dreamteam-001.c1oqqbxadjw6.us-east-1.rds.amazonaws.com',
         'PORT': 3306,
         'NAME': 'dreamteam',
         'USER': 'dreamteam_user',
@@ -108,7 +110,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
