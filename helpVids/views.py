@@ -11,6 +11,6 @@ def staff_help_view(request):
         return render(request, 'helpVids/help.html')
     return render(request, 'helpVids/staffHelp.html')
 
-@login_required(login_url="accounts:login")
+# Anyone should be able to access help videos no login required
 def help_view(request):
     return render(request, 'helpVids/help.html')
