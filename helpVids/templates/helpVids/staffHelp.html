@@ -2,6 +2,40 @@
 
 {% block content%}
 
-<h2> Staff Help</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4 mt-2 text-center">
+            <h1>Staff Guide</h1><br />
+            <a href="{% url 'helpVids:help' %}">Click Here To Visit the Customer Help Videos</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-12 mb-4 mt-2">
+        <h3 class="vidtitle">How to Sign Up as a New Member</h3>
+        <div class="video-responsive">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/i5ZSom6XxAQ" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
+        <!--h3 class="vidtitle">Add Title</h3>
+        <div class="video-responsive">
+        <iframe width="560" height="315" src="Add Embed Link" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div-->
+
+
+
+      </div>
+    </div>
+</div>
+
+<style>
+    .apptitle{
+        display:none;
+    }
+</style>
 
 {% endblock %}
