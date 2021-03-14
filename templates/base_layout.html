@@ -27,14 +27,21 @@
                   {% csrf_token %}
                   <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">View Reservations</button>
                 </form>  
-              </li>             
+              </li>
+              <li>
+                <form action="{% url 'helpVids:staffHelp' %}">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">?</button>
+                </form>  
+              </li>               
             {% else %}
               <li>
                 <form action="{% url 'reservations:myReservations' %}">
                   {% csrf_token %}
                   <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">My Reservations</button>
                 </form> 
-              </li>              
+              </li>
+              
             {% endif %}
               <li>
                 <form action="{% url 'accounts:logout' %}">
@@ -55,7 +62,7 @@
     </header>
     <section>
       <div>
-        <div class="row">
+        <div class="row apptitle">
           <div class="col-lg-12 mb-4 mt-2 text-center">
             <h1>Fitness Class Reservation System</h1>
           </div>
