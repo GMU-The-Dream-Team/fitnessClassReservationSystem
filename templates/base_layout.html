@@ -41,6 +41,12 @@
                   <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">My Reservations</button>
                 </form> 
               </li>
+              <li>
+                <form action="{% url 'helpVids:help' %}">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-success my-2 my-sm-0 loginbtn" type="submit">Need Help?</button>
+                </form>  
+              </li> 
               
             {% endif %}
               <li>
