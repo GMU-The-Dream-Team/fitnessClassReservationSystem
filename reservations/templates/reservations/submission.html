@@ -4,29 +4,26 @@
 
     <div class="submission-holder">
         <div class="ReservationOutput">
-                <table class="table table-bordered">
-                    <th>
+           
                         <h2>Reservation Ticket</h2>
-                    </th>
-                    <tr>
                             {% if userExists == False %}
-                                <td>
+
                                     <p>{{statement}}</p>
                                     <form action="{% url 'accounts:signup' %}">
                                         <input type="submit" value="Create a Customer Account"></input>
                                     </form>
                                     <input type="button" value="Return to Reservation Confirmation" onclick="history.back()">
-                                </td>
+
                             {% elif duplicateReservation == True %}
-                                <td>
+
                                     <p>{{statement}}</p>
                                     <form action="{% url 'reservations:staffReservations' %}">
                                         <input type="submit" value="View Reservations"></input>
                                     </form>
                                     <input type="button" value="Return to Reservation Confirmation" onclick="history.back()">
-                                </td>                                
+                              
                             {% else %}
-                            <td>
+
                                 <h6>
                                 <p>Reserved for: {{classReserved.dayOfWeek}} {{classDate}}</p>
                                 <p>Class Name: {{classReserved.className}}</p>
@@ -55,9 +52,6 @@
                                     <form  action="{% url 'fitnessClass:schedule' %}" method="get">
                                         <input type="submit" value="View Class Schedule">
                                     </form>   
-                            </td>          
-                            </tr>
-                        </table>
                     {% endif %}
         </div> 
     </div>
