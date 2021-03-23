@@ -185,13 +185,11 @@ def staffReservations_view(request):
         select = FitnessClass.objects.all().order_by("dayOfWeek")
         classList = {}
         days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-        flag = False
         counter = 0
         while counter < len(days):
             for i in select:
                 if i.dayOfWeek == days[counter]:
                     classList[i.id] = i
-                    break
             counter += 1
         rv['classList'] = classList
         return render(request, 'reservations/staffReservations.html', rv)
@@ -325,7 +323,7 @@ def cancelFunction(dateOfClass, currentWaitNumber):
 def checkDuplicateReservation(customer, dateOfClass, classId):
     count = Reservation.objects.filter(customerReserving = customer, classReserved = classId, classDate = dateOfClass).count()
     if count > 0 :
-        return (True, f'* You have already reserved for this class')
+        return (True, f'* You have an existing reservation')
     else:
         return (False, '')
 
@@ -351,7 +349,7 @@ def checkClassPassed(fitnessClass, classDate):
     elif startDate == nowDate:
         # same date - start time is in AM - now time is PM. Return True since class has already passed.
         if startTime[6:] == 'AM' and nowTime[6:] == 'PM':
-            return(True, '* This class has already started or has already taken place today. Can not reserve !!!')
+            return(True, '* This class has begun started or has already taken place today. Can not reserve !!!')
         # same date - same half of the day i.e. (AM and AM) or (PM and PM)
         elif startTime[6:] ==  nowTime[6:]:
             # same date - same am/pm, Check hour of day and minutes

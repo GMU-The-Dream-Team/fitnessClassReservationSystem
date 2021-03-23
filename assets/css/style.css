@@ -191,12 +191,44 @@ font-weight: bold;
 	
 }
 
+.loginpg-btn:hover {
+	background-color: #5a031c !important;
+	color: rgb(239, 240, 205) !important;
+	transition-duration: 0.4s;
+}
+
 .signupbtn{
 	border-color: black;
 	background-color: #900028 !important;
 	font-weight: bold;
 	color: #fff;
 	
+}
+.vidtitle{
+	padding-bottom:0%;
+}
+
+
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+	margin-bottom: 5%;
+}
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+
+.loginpg-btn{
+	border-color: black !important;
+	background-color: #900028 !important;
+	font-weight: bold !important;
+	color: #fff !important;
 }
 
 #credits {

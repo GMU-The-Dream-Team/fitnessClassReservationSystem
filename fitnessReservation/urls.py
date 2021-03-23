@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('reservations/', include('reservations.urls')),
     path('accounts/', include('accounts.urls')),
+    path('helpVids/', include('helpVids.urls')),
     path('', include('fitnessClass.urls'), name='home')
 ]
 
