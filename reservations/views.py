@@ -185,13 +185,11 @@ def staffReservations_view(request):
         select = FitnessClass.objects.all().order_by("dayOfWeek")
         classList = {}
         days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-        flag = False
         counter = 0
         while counter < len(days):
             for i in select:
                 if i.dayOfWeek == days[counter]:
                     classList[i.id] = i
-                    break
             counter += 1
         rv['classList'] = classList
         return render(request, 'reservations/staffReservations.html', rv)
